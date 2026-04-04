@@ -48,13 +48,9 @@ export default function LandingPage() {
     <div className="min-h-screen page-gradient selection:bg-indigo-100 selection:text-indigo-600">
       <Header />
 
-      <main className="max-w-7xl mx-auto px-8 lg:px-12 py-10 sm:py-12 flex flex-col gap-12 sm:gap-16">
+      <main className="max-w-7xl mx-auto px-8 lg:px-12 py-4 sm:py-6 flex flex-col gap-10 sm:gap-14">
         {/* Hero */}
-        <div className="flex flex-col gap-8 animate-fade-in-up items-start text-left max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50/80 border border-indigo-100 text-indigo-600 text-[11px] font-bold uppercase tracking-widest shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-            Core Debug Protocol
-          </div>
+        <div className="flex flex-col gap-6 animate-fade-in-up items-start text-left max-w-4xl pt-2 sm:pt-4">
           <div className="flex flex-col gap-4">
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-gray-900 tracking-tighter leading-[1] sm:leading-[0.95]">
               Debug faster.
