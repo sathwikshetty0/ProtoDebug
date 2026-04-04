@@ -201,6 +201,22 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         interface: "I2C",
         description: "High-accuracy temp + humidity",
       },
+      {
+        id: "bmp180",
+        label: "BMP180",
+        icon: "⛰️",
+        voltage: "3.3 V",
+        interface: "I2C",
+        description: "Temp + barometric pressure",
+      },
+      {
+        id: "ldr",
+        label: "LDR",
+        icon: "☀️",
+        voltage: "3.3–5 V",
+        interface: "Analog",
+        description: "Light-dependent resistor, photocell",
+      },
     ],
   },
   {
@@ -254,6 +270,38 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         voltage: "3.3–5 V",
         interface: "GPIO (interrupt)",
         description: "KY-040 / incremental",
+      },
+      {
+        id: "adxl345",
+        label: "ADXL345",
+        icon: "📐",
+        voltage: "3.3–5 V",
+        interface: "I2C / SPI",
+        description: "3-axis accelerometer, ±16 g",
+      },
+      {
+        id: "l3g4200d",
+        label: "L3G4200D",
+        icon: "🌀",
+        voltage: "3.3 V",
+        interface: "I2C / SPI",
+        description: "3-axis gyroscope, ±2000 °/s",
+      },
+      {
+        id: "hmc5883l",
+        label: "HMC5883L",
+        icon: "🧭",
+        voltage: "3.3 V",
+        interface: "I2C",
+        description: "3-axis magnetometer / compass",
+      },
+      {
+        id: "vcnl4000",
+        label: "VCNL4000",
+        icon: "👋",
+        voltage: "3.3 V",
+        interface: "I2C",
+        description: "Proximity + ambient light sensor",
       },
     ],
   },
@@ -438,6 +486,44 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         voltage: "3.7–4.2 V",
         interface: "UART",
         description: "GSM/GPRS, SMS + HTTP",
+      },
+      {
+        id: "neo6m",
+        label: "NEO-6M GPS",
+        icon: "🛰️",
+        voltage: "3.3–5 V",
+        interface: "UART",
+        description: "GPS module, ±2.5 m accuracy",
+      },
+    ],
+  },
+  {
+    id: "input",
+    label: "Light, Sound & Input",
+    components: [
+      {
+        id: "lm393",
+        label: "LM393 Sound",
+        icon: "🎤",
+        voltage: "3.3–5 V",
+        interface: "Analog / GPIO",
+        description: "Sound level sensor, clap detect",
+      },
+      {
+        id: "tsop1738",
+        label: "TSOP1738",
+        icon: "📻",
+        voltage: "5 V",
+        interface: "GPIO",
+        description: "IR remote receiver, 38 kHz",
+      },
+      {
+        id: "ttp223",
+        label: "TTP223",
+        icon: "👆",
+        voltage: "2.0–5.5 V",
+        interface: "GPIO",
+        description: "Capacitive touch sensor module",
       },
     ],
   },
@@ -2602,6 +2688,394 @@ function connect(url: string) {
     setTimeout(() => connect(url), delay);
     delay = Math.min(delay * 2, 30000);
   };
+}`,
+    },
+  },
+
+  // ══ NEW SENSORS ════════════════════════════════════════════════════════════
+
+  // ── BMP180 ────────────────────────────────────────────────────────────────
+  {
+    id: "bmp180-reads-zero",
+    title: "BMP180 reads 0 or NaN for pressure/temperature",
+    description:
+      "BMP180 returns zero or invalid values even though it's wired correctly on I2C.",
+    tags: [
+      "bmp180", "i2c", "pressure", "temperature",
+      "esp32", "esp8266", "uno", "nano", "mega",
+    ],
+    steps: [
+      "Run I2C scanner — BMP180 address is 0x77. If not found, check SDA/SCL and 3.3 V supply",
+      "BMP180 is a 3.3 V device — never connect VCC to 5 V directly; use a 3.3 V regulator or level shifter",
+      "Use the Adafruit BMP085/BMP180 library: call bmp.begin() and check its return value (false = not found)",
+      "Always call readTemperature() BEFORE readPressure() — BMP180 needs temp for pressure compensation",
+      "Add 100 ms delay after begin() before first read",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `#include <Adafruit_BMP085.h>
+Adafruit_BMP085 bmp;
+
+void setup() {
+  Serial.begin(115200);
+  if (!bmp.begin()) {
+    Serial.println("BMP180 not found — check wiring/address");
+    while (1);
+  }
+}
+void loop() {
+  float temp = bmp.readTemperature();       // must read first
+  float pressure = bmp.readPressure();      // Pa
+  float altitude = bmp.readAltitude(101325); // sea-level Pa
+  Serial.printf("%.1f°C  %.0f Pa  %.1f m\\n", temp, pressure, altitude);
+  delay(500);
+}`,
+    },
+  },
+
+  // ── LDR ───────────────────────────────────────────────────────────────────
+  {
+    id: "ldr-always-same-value",
+    title: "LDR reads always 0 or stuck at max value",
+    description:
+      "Light-dependent resistor gives a fixed analog reading regardless of light level.",
+    tags: [
+      "ldr", "analog", "light", "sensor",
+      "uno", "nano", "mega", "esp32", "esp8266",
+    ],
+    steps: [
+      "LDR requires a voltage divider — connect LDR from VCC to analog pin, and a 10 kΩ resistor from the same pin to GND",
+      "If reading is always 1023: the pull-down resistor is missing — add 10 kΩ to GND",
+      "If reading is always 0: LDR and resistor may be swapped — swap them in the divider",
+      "ESP32 ADC note: use analogRead() only on ADC1 pins (GPIO 32–39); ADC2 is disabled when WiFi is active",
+      "Map the raw value to a 0–100 lux scale: map(analogRead(A0), darkVal, brightVal, 0, 100)",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `// LDR voltage divider: VCC → LDR → A0 → 10kΩ → GND
+void setup() { Serial.begin(115200); }
+void loop() {
+  int raw = analogRead(A0);       // 0–1023 (Arduino) / 0–4095 (ESP32)
+  int pct = map(raw, 50, 950, 0, 100); // calibrate dark/bright limits
+  pct = constrain(pct, 0, 100);
+  Serial.printf("Raw: %d  Light: %d%%\\n", raw, pct);
+  delay(200);
+}`,
+    },
+  },
+
+  // ── ADXL345 ───────────────────────────────────────────────────────────────
+  {
+    id: "adxl345-reads-zero",
+    title: "ADXL345 accelerometer reads all zeros",
+    description:
+      "ADXL345 returns 0, 0, 0 for all three axes or fails to initialise.",
+    tags: [
+      "adxl345", "accelerometer", "i2c", "spi",
+      "esp32", "uno", "nano", "mega",
+    ],
+    steps: [
+      "Check I2C address: ADXL345 is 0x53 when SDO/ALT is LOW, 0x1D when HIGH. Run I2C scanner to confirm",
+      "Power: ADXL345 runs on 3.3 V. Use logic-level shifting if connecting to 5 V Arduino I2C",
+      "CS pin must be tied HIGH for I2C mode (if using the breakout in SPI mode CS is active-low)",
+      "After begin(), set the range: accel.setRange(ADXL345_RANGE_2_G) and call accel.setDataRate(ADXL345_DATARATE_100_HZ)",
+      "All-zero readings often mean the device isn't initialised — check that accel.begin() returns true",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `#include <Adafruit_ADXL345_U.h>
+Adafruit_ADXL345_Unified accel(12345);
+
+void setup() {
+  Serial.begin(115200);
+  if (!accel.begin()) {
+    Serial.println("ADXL345 not found");
+    while (1);
+  }
+  accel.setRange(ADXL345_RANGE_2_G);
+}
+void loop() {
+  sensors_event_t event;
+  accel.getEvent(&event);
+  Serial.printf("X:%.2f Y:%.2f Z:%.2f m/s²\\n",
+    event.acceleration.x,
+    event.acceleration.y,
+    event.acceleration.z);
+  delay(100);
+}`,
+    },
+  },
+
+  // ── L3G4200D ──────────────────────────────────────────────────────────────
+  {
+    id: "l3g4200d-drift",
+    title: "L3G4200D gyroscope drifts — angle keeps increasing at rest",
+    description:
+      "Integrating L3G4200D angular rate gives an angle that drifts even when the sensor is stationary.",
+    tags: [
+      "l3g4200d", "gyroscope", "drift", "i2c",
+      "esp32", "uno", "mega",
+    ],
+    steps: [
+      "All gyroscopes have a zero-rate offset (bias). At startup, average 200–500 readings to get the offset, then subtract it from every reading",
+      "Temperature affects bias — recalibrate if ambient temperature changes significantly",
+      "Gyro angle = integral of rate × dt. Small errors in dt or bias accumulate — gyros alone can't give absolute angle",
+      "For stable angle: fuse with accelerometer using a complementary filter: angle = 0.98*(angle + gyro*dt) + 0.02*accel_angle",
+      "Reduce polling interval to < 10 ms (100 Hz) for accurate integration",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `// Simple bias calibration + complementary filter
+float gyroBiasZ = 0;
+void calibrate(int samples = 500) {
+  long sum = 0;
+  for (int i = 0; i < samples; i++) {
+    sum += readRawGyroZ(); // your read function
+    delay(2);
+  }
+  gyroBiasZ = sum / (float)samples;
+}
+
+float angle = 0;
+unsigned long lastT = 0;
+void loop() {
+  float dt = (millis() - lastT) / 1000.0;
+  lastT = millis();
+  float rate = (readRawGyroZ() - gyroBiasZ) * 0.00875; // dps for ±250 range
+  angle += rate * dt;
+  Serial.println(angle);
+  delay(10);
+}`,
+    },
+  },
+
+  // ── HMC5883L ──────────────────────────────────────────────────────────────
+  {
+    id: "hmc5883l-wrong-heading",
+    title: "HMC5883L compass heading is wrong or jumps erratically",
+    description:
+      "Calculated compass heading doesn't match actual direction, or oscillates by tens of degrees.",
+    tags: [
+      "hmc5883l", "magnetometer", "compass", "i2c", "heading",
+      "esp32", "uno", "nano", "mega",
+    ],
+    steps: [
+      "HMC5883L address is 0x1E. Confirm with I2C scanner. QMC5883L clone uses 0x0D — use QMC5883L library instead if clone detected",
+      "Hard-iron calibration: rotate sensor 360° in horizontal plane, record min/max for X and Y, subtract midpoint: offsetX = (maxX+minX)/2",
+      "Keep the sensor away from motors, power wires, and iron — these create magnetic interference",
+      "Hold the sensor level for 2D heading; tilt compensation requires accelerometer data for full 3D",
+      "heading = atan2(y - offsetY, x - offsetX) × 180 / PI; if heading < 0 add 360",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `#include <HMC5883L.h>
+HMC5883L compass;
+// Hard-iron offsets from calibration:
+float offsetX = 0, offsetY = 0;
+
+void setup() {
+  Wire.begin();
+  compass.initialize();
+}
+void loop() {
+  int16_t mx, my, mz;
+  compass.getHeading(&mx, &my, &mz);
+  float heading = atan2(my - offsetY, mx - offsetX) * 180.0 / PI;
+  if (heading < 0) heading += 360.0;
+  Serial.printf("Heading: %.1f°\\n", heading);
+  delay(100);
+}`,
+    },
+  },
+
+  // ── NEO-6M GPS ────────────────────────────────────────────────────────────
+  {
+    id: "neo6m-no-fix",
+    title: "NEO-6M GPS never gets a fix — no valid NMEA data",
+    description:
+      "GPS module powers up and sends data but coordinates are 0,0 or no valid GPRMC/GPGGA sentences appear.",
+    tags: [
+      "neo6m", "gps", "uart", "nmea", "fix",
+      "esp32", "esp8266", "uno", "mega",
+    ],
+    steps: [
+      "GPS fix requires clear sky view — initial cold start can take 1–3 minutes outdoors",
+      "Baud rate is 9600 by default. Use SoftwareSerial on Uno (avoid pins 0/1 which are hardware Serial)",
+      "TX of GPS → RX of MCU, RX of GPS → TX of MCU. Voltage: NEO-6M is 3.3 V tolerant on TX but RX needs a level shifter when connecting 5 V Arduino TX",
+      "Print raw serial output to check NMEA sentences — a fix is indicated when GPRMC has 'A' (active) not 'V' (void)",
+      "Use TinyGPS++ library: gps.encode() each incoming char, then check gps.location.isValid()",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `#include <TinyGPSPlus.h>
+#include <SoftwareSerial.h>
+
+TinyGPSPlus gps;
+SoftwareSerial ss(4, 3); // RX, TX
+
+void setup() {
+  Serial.begin(115200);
+  ss.begin(9600);
+}
+void loop() {
+  while (ss.available()) gps.encode(ss.read());
+  if (gps.location.isUpdated()) {
+    Serial.printf("Lat: %.6f  Lon: %.6f  Sats: %d\\n",
+      gps.location.lat(), gps.location.lng(),
+      gps.satellites.value());
+  }
+}`,
+    },
+  },
+
+  // ── LM393 Sound ───────────────────────────────────────────────────────────
+  {
+    id: "lm393-sound-not-triggering",
+    title: "LM393 sound sensor never triggers on loud sounds",
+    description:
+      "Sound sensor digital output stays HIGH or never detects claps/sounds despite loud noise.",
+    tags: [
+      "lm393", "sound", "analog", "gpio",
+      "uno", "nano", "mega", "esp32",
+    ],
+    steps: [
+      "The LM393 module has a sensitivity trim pot — turn it clockwise to increase sensitivity",
+      "Digital output (DO) goes LOW on detection (active-low). Read with digitalRead() and trigger on LOW, not HIGH",
+      "For continuous monitoring use the analog output (AO) — it gives the raw amplitude as 0–1023",
+      "Place the microphone directly facing the sound source — the condenser mic has a directional pattern",
+      "Avoid mounting near vibrating surfaces (motors, fans) which create constant false triggers",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `const int DO_PIN = 2; // digital out — active LOW
+const int AO_PIN = A0; // analog out
+
+void setup() {
+  pinMode(DO_PIN, INPUT);
+  Serial.begin(115200);
+}
+void loop() {
+  int level = analogRead(AO_PIN);         // 0–1023 raw amplitude
+  bool detected = digitalRead(DO_PIN) == LOW; // above threshold
+  if (detected)
+    Serial.printf("Sound! level=%d\\n", level);
+  delay(10);
+}`,
+    },
+  },
+
+  // ── TSOP1738 ──────────────────────────────────────────────────────────────
+  {
+    id: "tsop1738-ir-remote-not-decoding",
+    title: "TSOP1738 IR remote not decoding — always 0 or garbage codes",
+    description:
+      "IR remote receiver outputs garbage codes, 0xFFFFFFFF, or never triggers when a remote button is pressed.",
+    tags: [
+      "tsop1738", "ir", "remote", "gpio",
+      "uno", "nano", "mega", "esp32",
+    ],
+    steps: [
+      "TSOP1738 pin order (flat face): OUT, GND, VCC — many breakout boards label differently, verify with datasheet",
+      "VCC must be 5 V with a 100 Ω series resistor and 4.7 µF decoupling cap on the supply pin to avoid interference",
+      "Output is active-low (idle HIGH, pulls LOW on signal) — use IRremote library and connect OUT to an interrupt-capable pin",
+      "0xFFFFFFFF means repeat code (button held) — the previous code is still valid",
+      "Keep the receiver away from bright LED/fluorescent lights that emit IR noise at 38 kHz",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `#include <IRremote.hpp>
+
+const int IR_PIN = 2;
+IRrecv irrecv(IR_PIN);
+
+void setup() {
+  Serial.begin(115200);
+  IrReceiver.begin(IR_PIN, ENABLE_LED_FEEDBACK);
+}
+void loop() {
+  if (IrReceiver.decode()) {
+    uint32_t code = IrReceiver.decodedIRData.decodedRawData;
+    if (code != 0xFFFFFFFF) // ignore repeat
+      Serial.printf("Code: 0x%08X\\n", code);
+    IrReceiver.resume(); // ready for next signal
+  }
+}`,
+    },
+  },
+
+  // ── TTP223 ────────────────────────────────────────────────────────────────
+  {
+    id: "ttp223-always-triggered",
+    title: "TTP223 touch sensor always reads HIGH / triggers randomly",
+    description:
+      "Capacitive touch sensor triggers without being touched, or never returns to LOW after a touch.",
+    tags: [
+      "ttp223", "touch", "capacitive", "gpio",
+      "uno", "nano", "mega", "esp32",
+    ],
+    steps: [
+      "Keep wires to the touch pad short (< 20 cm) — long wires add parasitic capacitance causing false triggers",
+      "The sensing pad area is on the top of the chip/module — make sure nothing is resting on it",
+      "TTP223 has two solder pads: A changes between toggle and momentary mode; B changes between active-high and active-low output",
+      "Power supply noise causes false triggers — add a 100 nF decoupling cap between VCC and GND close to the module",
+      "Shield the sensing electrode with a ground plane around (not over) it to reduce EMI pickup",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `const int TOUCH_PIN = 4; // TTP223 OUT pin
+
+void setup() {
+  pinMode(TOUCH_PIN, INPUT);
+  Serial.begin(115200);
+}
+void loop() {
+  // Default config: active HIGH on touch, LOW when released
+  if (digitalRead(TOUCH_PIN) == HIGH) {
+    Serial.println("Touched!");
+    delay(50); // debounce
+    while (digitalRead(TOUCH_PIN) == HIGH); // wait for release
+    Serial.println("Released");
+  }
+}`,
+    },
+  },
+
+  // ── VCNL4000 ──────────────────────────────────────────────────────────────
+  {
+    id: "vcnl4000-proximity-stuck",
+    title: "VCNL4000 proximity reading stuck or not changing",
+    description:
+      "VCNL4000 proximity value doesn't change as objects approach, or always reads max/min.",
+    tags: [
+      "vcnl4000", "proximity", "i2c", "ambient",
+      "esp32", "uno", "nano", "mega",
+    ],
+    steps: [
+      "VCNL4000 I2C address is fixed at 0x13 — confirm with I2C scanner",
+      "VCC is 3.3 V only — do NOT connect to 5 V",
+      "After begin(), set IR LED current: proximity.setLEDcurrent(20) (0–20 in steps of 3.2 mA). Higher current = longer range",
+      "Set proximity measurement frequency: proximity.setFrequency(VCNL4000_3M125); call proximity.readProximity()",
+      "Proximity value decreases as objects get closer (counts increase). Typical range: 1–200 mm. Cover the sensor window if ambient IR is saturating it",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `#include <Adafruit_VCNL4000.h>
+Adafruit_VCNL4000 vcnl;
+
+void setup() {
+  Serial.begin(115200);
+  if (!vcnl.begin()) {
+    Serial.println("VCNL4000 not found at 0x13");
+    while (1);
+  }
+  vcnl.setLEDcurrent(20);       // max IR current
+  vcnl.setFrequency(VCNL4000_3M125);
+}
+void loop() {
+  uint16_t prox = vcnl.readProximity();
+  uint16_t amb  = vcnl.readAmbient();
+  Serial.printf("Proximity: %u  Ambient: %u\\n", prox, amb);
+  delay(100);
 }`,
     },
   },
