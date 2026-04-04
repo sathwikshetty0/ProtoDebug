@@ -47,10 +47,10 @@ export default function RootLayout({
               </div>
               <p className="text-xs text-gray-400 font-bold tracking-tight uppercase">AI-Powered Debugging System</p>
             </div>
-            
+
             <div className="flex flex-col gap-2 items-center md:items-end text-center md:text-right">
               <p className="text-xs font-black text-gray-500 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100/50 shadow-sm">&copy; {new Date().getFullYear()} sathwik shetty</p>
-              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Innovation Labs — Bengaluru, India</p>
+              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Manglore , India</p>
             </div>
           </div>
         </footer>
