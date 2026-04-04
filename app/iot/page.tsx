@@ -16,11 +16,11 @@ const MCU_GROUPS = Array.from(new Set(MICROCONTROLLERS.map((m) => m.group)));
 
 function StepLabel({ n, text }: { n: number; text: string }) {
   return (
-    <div className="flex items-center gap-2.5">
-      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold shrink-0">
+    <div className="flex items-center gap-3">
+      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 text-white text-[11px] font-bold shrink-0 shadow-sm shadow-indigo-200">
         {n}
       </span>
-      <p className="text-sm font-semibold text-gray-900">{text}</p>
+      <p className="text-sm font-bold text-gray-900">{text}</p>
     </div>
   );
 }
@@ -72,35 +72,35 @@ export default function IotPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen page-gradient">
       <Header />
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col gap-5">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col gap-6">
 
-        <div>
-          <h1 className="text-xl font-bold text-gray-900">IoT / Hardware</h1>
-          <p className="text-sm text-gray-400 mt-1">
+        <div className="animate-fade-in-up">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">IoT / Hardware</h1>
+          <p className="text-sm text-gray-500 mt-2 leading-relaxed">
             Pick your MCU, add components, then describe the issue.
           </p>
         </div>
 
         {/* Step 1: MCU */}
-        <section className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-sm">
+        <section className="section-card rounded-2xl p-5 sm:p-6 animate-fade-in-up delay-100">
           <StepLabel n={1} text="Choose your microcontroller" />
-          <div className="flex flex-col gap-4 mt-4">
+          <div className="flex flex-col gap-5 mt-5">
             {MCU_GROUPS.map((group) => (
               <div key={group}>
-                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+                <p className="section-label mb-3">
                   {group}
                 </p>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2.5">
                   {MICROCONTROLLERS.filter((m) => m.group === group).map((m) => (
                     <button
                       key={m.id}
                       onClick={() => pickMcu(m)}
-                      className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border text-center transition-all touch-manipulation ${
+                      className={`flex flex-col items-center gap-2 p-3.5 rounded-xl border text-center transition-all duration-200 touch-manipulation ${
                         selectedMcu?.id === m.id
-                          ? "border-indigo-400 bg-indigo-50 text-indigo-700 shadow-sm"
-                          : "border-gray-200 bg-gray-50 text-gray-600 hover:border-indigo-200 hover:bg-indigo-50/50 active:bg-indigo-50"
+                          ? "border-indigo-400 bg-indigo-50 text-indigo-700 shadow-md shadow-indigo-100"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-indigo-200 hover:bg-indigo-50/50 active:bg-indigo-50 hover:shadow-sm"
                       }`}
                     >
                       <span className="text-xl leading-none">{m.icon}</span>
@@ -116,20 +116,20 @@ export default function IotPage() {
 
         {/* Step 2: Components */}
         {selectedMcu && (
-          <section className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
+          <section className="section-card rounded-2xl p-5 sm:p-6 animate-scale-up">
+            <div className="flex items-center justify-between mb-5">
               <StepLabel n={2} text="Add sensors & modules" />
-              <span className="text-[11px] text-gray-400 font-medium">multi-select</span>
+              <span className="text-[11px] text-gray-400 font-medium bg-gray-100 px-2.5 py-1 rounded-full">multi-select</span>
             </div>
 
             {/* Selected component badges */}
             {selectedCompObjects.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4 pb-4 border-b border-gray-100">
+              <div className="flex flex-wrap gap-2 mb-5 pb-5 border-b border-gray-100">
                 {selectedCompObjects.map((c) => (
                   <button
                     key={c.id}
                     onClick={() => toggleComponent(c)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold hover:bg-indigo-200 transition-colors touch-manipulation"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold hover:bg-indigo-200 transition-all duration-200 touch-manipulation shadow-sm shadow-indigo-100 hover:shadow-md hover:shadow-indigo-100"
                   >
                     {c.icon} {c.label}
                     <span className="text-indigo-400 ml-0.5">×</span>
@@ -138,22 +138,22 @@ export default function IotPage() {
               </div>
             )}
 
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-6">
               {COMPONENT_CATEGORIES.map((cat) => (
                 <div key={cat.id}>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2">
+                  <p className="section-label mb-3">
                     {cat.label}
                   </p>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5">
                     {cat.components.map((comp) => (
                       <button
                         key={comp.id}
                         onClick={() => toggleComponent(comp)}
                         title={`${comp.description} · ${comp.interface} · ${comp.voltage}`}
-                        className={`flex flex-col items-center gap-1.5 px-2 py-3 rounded-xl border text-center transition-all touch-manipulation ${
+                        className={`flex flex-col items-center gap-1.5 px-2 py-3.5 rounded-xl border text-center transition-all duration-200 touch-manipulation ${
                           selectedComponents.has(comp.id)
-                            ? "border-emerald-400 bg-emerald-50 text-emerald-700 shadow-sm"
-                            : "border-gray-200 bg-gray-50 text-gray-600 hover:border-emerald-200 hover:bg-emerald-50/50 active:bg-emerald-50"
+                            ? "border-emerald-400 bg-emerald-50 text-emerald-700 shadow-md shadow-emerald-100"
+                            : "border-gray-200 bg-white text-gray-600 hover:border-emerald-200 hover:bg-emerald-50/50 active:bg-emerald-50 hover:shadow-sm"
                         }`}
                       >
                         <span className="text-lg leading-none">{comp.icon}</span>
@@ -170,7 +170,7 @@ export default function IotPage() {
 
         {/* Step 3: Search */}
         {selectedMcu && (
-          <section className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-sm">
+          <section className="section-card rounded-2xl p-5 sm:p-6 animate-scale-up">
             <StepLabel
               n={3}
               text={
@@ -181,7 +181,7 @@ export default function IotPage() {
             />
 
             {/* Quick chips */}
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="flex flex-wrap gap-2 mt-5">
               <button onClick={() => applyFill("voltage mismatch 5V 3.3V level")} className="quick-chip">Voltage mismatch</button>
               <button onClick={() => applyFill("power supply reset brownout")} className="quick-chip">Power / resets</button>
               <button onClick={() => applyFill("I2C not found address")} className="quick-chip">I2C not found</button>
@@ -265,16 +265,16 @@ export default function IotPage() {
               )}
             </div>
 
-            <form onSubmit={handleSearch} className="flex gap-2 mt-4">
+            <form onSubmit={handleSearch} className="flex gap-2.5 mt-5">
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Describe the issue or paste error keywords..."
-                className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-w-0"
+                className="flex-1 input-polished min-w-0"
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold rounded-xl transition-colors shrink-0"
+                className="btn-primary shrink-0"
               >
                 Search
               </button>
@@ -295,8 +295,10 @@ export default function IotPage() {
         )}
 
         {!selectedMcu && (
-          <div className="flex flex-col items-center gap-2 py-12 text-center">
-            <span className="text-3xl">🔩</span>
+          <div className="flex flex-col items-center gap-3 py-16 text-center animate-fade-in">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 border border-gray-100 flex items-center justify-center shadow-sm">
+              <span className="text-3xl">🔩</span>
+            </div>
             <p className="text-sm text-gray-500 font-medium">Select a microcontroller to get started</p>
           </div>
         )}
