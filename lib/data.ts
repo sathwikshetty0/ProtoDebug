@@ -45,6 +45,27 @@ export interface WebDomain {
   quickFills: string[];
 }
 
+export interface LearnSection {
+  title: string;
+  body: string;
+  code?: { lang: string; snippet: string };
+}
+
+export interface Bot {
+  id: string;
+  label: string;
+  icon: string;
+  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  description: string;
+  /** Short hardware overview shown on bot card */
+  hardware: string[];
+  /** Problem tags that belong to this bot — used to filter ALL_PROBLEMS */
+  problemTags: string[];
+  quickFills: string[];
+  /** Step-by-step learning guide for this bot */
+  learnSections: LearnSection[];
+}
+
 // ── Microcontrollers ────────────────────────────────────────────────────────
 
 export const MICROCONTROLLERS: Microcontroller[] = [
@@ -420,6 +441,128 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       },
     ],
   },
+  {
+    id: "ir_sensors",
+    label: "Line & IR Sensors",
+    components: [
+      {
+        id: "ir_array_5ch",
+        label: "5-ch IR Array",
+        icon: "〰️",
+        voltage: "5 V",
+        interface: "Analog / GPIO",
+        description: "5-sensor line-follower array",
+      },
+      {
+        id: "ir_array_8ch",
+        label: "QTR-8A / 8-ch IR",
+        icon: "〰️",
+        voltage: "5 V",
+        interface: "Analog",
+        description: "8-sensor reflectance array (Pololu)",
+      },
+      {
+        id: "tcrt5000_single",
+        label: "TCRT5000 Single",
+        icon: "↔️",
+        voltage: "5 V",
+        interface: "Analog / GPIO",
+        description: "Single IR reflective sensor",
+      },
+      {
+        id: "sharp_ir",
+        label: "Sharp GP2Y0A21",
+        icon: "📏",
+        voltage: "5 V",
+        interface: "Analog",
+        description: "10–80 cm analog IR distance",
+      },
+    ],
+  },
+  {
+    id: "motor_drivers",
+    label: "Motor Drivers",
+    components: [
+      {
+        id: "bts7960",
+        label: "BTS7960 (IBT-2)",
+        icon: "⚡",
+        voltage: "6–27 V",
+        interface: "GPIO + PWM",
+        description: "43 A dual H-bridge, RC/soccer bots",
+      },
+      {
+        id: "tb6612fng",
+        label: "TB6612FNG",
+        icon: "🔄",
+        voltage: "2.5–13.5 V",
+        interface: "GPIO + PWM",
+        description: "Efficient dual H-bridge, 1.2 A",
+      },
+      {
+        id: "l9110s",
+        label: "L9110S",
+        icon: "🔄",
+        voltage: "2.5–12 V",
+        interface: "GPIO + PWM",
+        description: "Dual H-bridge, 800 mA, tiny",
+      },
+      {
+        id: "mx1508",
+        label: "MX1508",
+        icon: "🔄",
+        voltage: "2–10 V",
+        interface: "GPIO + PWM",
+        description: "Dual H-bridge, 1.5 A, cheap",
+      },
+      {
+        id: "afmotor",
+        label: "Adafruit Motor Shield",
+        icon: "🛡️",
+        voltage: "5–12 V",
+        interface: "I2C / SPI",
+        description: "L293D-based shield, 4 DC / 2 stepper",
+      },
+    ],
+  },
+  {
+    id: "dc_motors",
+    label: "DC & Geared Motors",
+    components: [
+      {
+        id: "n20_motor",
+        label: "N20 Geared Motor",
+        icon: "⚙️",
+        voltage: "3–12 V",
+        interface: "DC (2-wire)",
+        description: "Micro geared DC, line followers",
+      },
+      {
+        id: "johnson_motor",
+        label: "Johnson DC Motor",
+        icon: "⚙️",
+        voltage: "6–12 V",
+        interface: "DC (2-wire)",
+        description: "RS-550/775, high-speed brushed",
+      },
+      {
+        id: "tt_motor",
+        label: "TT Gear Motor",
+        icon: "⚙️",
+        voltage: "3–6 V",
+        interface: "DC (2-wire)",
+        description: "Yellow smart car gear motor",
+      },
+      {
+        id: "brushless_esc",
+        label: "Brushless + ESC",
+        icon: "🚀",
+        voltage: "7.4–11.1 V",
+        interface: "PWM (ESC signal)",
+        description: "BLDC motor with ESC, RC race bot",
+      },
+    ],
+  },
 ];
 
 // ── Web domains ─────────────────────────────────────────────────────────────
@@ -490,6 +633,499 @@ export const WEB_DOMAINS: WebDomain[] = [
     quickFills: [
       "WebSocket connection refused blocked nginx",
       "No reconnection on disconnect close",
+    ],
+  },
+];
+
+// ── Bots ────────────────────────────────────────────────────────────────────
+
+export const BOTS: Bot[] = [
+  {
+    id: "line_follower",
+    label: "Line Follower",
+    icon: "〰️",
+    difficulty: "Beginner",
+    description: "PID-controlled robot that follows a black line on white surface using IR sensor array.",
+    hardware: ["Arduino Nano/Uno", "5-ch or 8-ch IR array", "L298N / TB6612FNG", "N20 geared motors", "LiPo 7.4 V"],
+    problemTags: ["line_follower", "ir_array", "pid", "n20_motor", "l298n", "tb6612fng"],
+    quickFills: ["IR sensors always read same value", "Bot oscillates on line", "Bot loses line on sharp turn", "PID tuning Kp too high"],
+    learnSections: [
+      {
+        title: "How it works",
+        body: "A line follower reads an array of IR sensors pointed at the ground. White surface reflects IR → sensor reads LOW. Black line absorbs IR → sensor reads HIGH. The bot calculates the line's position relative to center (error), then uses PID to steer the motors to correct that error. The faster it corrects, the smoother the tracking.",
+      },
+      {
+        title: "Parts list & wiring",
+        body: `You need:\n• Arduino Nano or Uno\n• 5-channel IR sensor array (e.g. TCRT5000 ×5 on a PCB)\n• L298N or TB6612FNG motor driver\n• 2× N20 geared motors (100–300 RPM) with wheels\n• LiPo 7.4 V 1000–1500 mAh (25C+)\n• 5 V BEC/buck converter for the Arduino\n\nWiring:\n• Sensor array → Arduino A0–A4 (analog)\n• Motor driver IN1/IN2/IN3/IN4 → Arduino D5–D8\n• Motor driver ENA/ENB → Arduino D9/D10 (PWM)\n• Motors → Motor driver OUT1/OUT2, OUT3/OUT4\n• LiPo → Motor driver power input\n• BEC 5 V output → Arduino VIN (or 5 V pin)`,
+      },
+      {
+        title: "Sensor calibration",
+        body: "Before running PID, calibrate the sensors. Place the robot over the line and scan side-to-side to record the min (white) and max (black) analog value for each sensor. Normalize readings to 0–1000 range. The QTRSensors library handles this automatically. Manual calibration: store minVal[] and maxVal[], then map analogRead to 0–1000.",
+        code: {
+          lang: "cpp",
+          snippet: `int minVal[5] = {1023,1023,1023,1023,1023};
+int maxVal[5] = {0,0,0,0,0};
+
+void calibrate() {
+  // Move robot over line for 2 s while calling this
+  for (int i = 0; i < 5; i++) {
+    int v = analogRead(A0 + i);
+    if (v < minVal[i]) minVal[i] = v;
+    if (v > maxVal[i]) maxVal[i] = v;
+  }
+}
+
+int normalized(int i) {
+  int v = analogRead(A0 + i);
+  return map(v, minVal[i], maxVal[i], 0, 1000);
+}`,
+        },
+      },
+      {
+        title: "Line position & error",
+        body: "Calculate a weighted average of sensor readings to get the line position as a single number. For 5 sensors at positions [0, 1000, 2000, 3000, 4000], center = 2000. Error = position − 2000. This gives a signed error: negative means line is left, positive means line is right.",
+        code: {
+          lang: "cpp",
+          snippet: `int linePosition() {
+  long weighted = 0, total = 0;
+  for (int i = 0; i < 5; i++) {
+    int v = normalized(i);
+    weighted += (long)v * i * 1000;
+    total += v;
+  }
+  if (total == 0) return lastPos; // line lost
+  lastPos = weighted / total;    // 0–4000, center=2000
+  return lastPos;
+}
+
+// Error: negative = line left of center, positive = right
+int error = linePosition() - 2000;`,
+        },
+      },
+      {
+        title: "PID control loop",
+        body: "Start with only P (set Ki=0, Kd=0). Raise Kp until the bot follows the line but oscillates, then back off 30%. Add Kd (try Kd = 5–10×Kp) to damp oscillation. Add Ki only if there's consistent drift. Run the loop at 50–100 Hz (10–20 ms delay). Increase base speed gradually — re-tune Kp each time you raise speed.",
+        code: {
+          lang: "cpp",
+          snippet: `float Kp=0.4, Ki=0.0001, Kd=2.0;
+float lastErr=0, integral=0;
+int BASE=120;
+
+void loop() {
+  float err = linePosition() - 2000;
+  integral = constrain(integral + err, -500, 500);
+  float correction = Kp*err + Ki*integral + Kd*(err-lastErr);
+  lastErr = err;
+
+  int L = constrain(BASE + correction, 0, 255);
+  int R = constrain(BASE - correction, 0, 255);
+  setMotors(L, R);
+  delay(10);
+}`,
+        },
+      },
+    ],
+  },
+  {
+    id: "maze_solver",
+    label: "Maze Solver",
+    icon: "🧩",
+    difficulty: "Intermediate",
+    description: "Robot navigates a maze using left-hand rule or flood-fill algorithm with IR sensors.",
+    hardware: ["Arduino Mega", "3× TCRT5000 or 5-ch array", "L298N", "N20 or TT motors", "LiPo 7.4 V"],
+    problemTags: ["maze_solver", "ir_array", "pid", "junction", "n20_motor", "l298n"],
+    quickFills: ["Junction not detected", "Bot turns wrong direction", "False junction detection", "Bot stuck in dead end"],
+    learnSections: [
+      {
+        title: "How it works",
+        body: "A maze solver follows lines but must also navigate junctions (T, cross, left-only, right-only). The Left-Hand Rule (LHR) is the simplest algorithm: at every junction, prefer left. This guarantees solving any simply-connected maze. At dead ends, turn around (U-turn). After solving once, the bot can replay the optimal path by trimming U-turns from the recorded path.",
+      },
+      {
+        title: "Sensor setup",
+        body: `You need at least 3 sensors: Left (L), Center (C), Right (R). A 5-channel array works better:\n• Sensor 0 (far-left) — detects left junction\n• Sensor 1 — left of center\n• Sensor 2 — center\n• Sensor 3 — right of center\n• Sensor 4 (far-right) — detects right junction\n\nMount the array 5–8 mm above the ground, centered under the chassis. For junction detection you need the outermost sensors to extend wider than the line width (line ≈ 20 mm, array span ≈ 80 mm+).`,
+      },
+      {
+        title: "Junction detection",
+        body: "Read all 5 sensors. A junction is detected when the outer sensors (S0 or S4) see black while the center (S2) also sees black. Dead end = all sensors see white. Straight = only center sensors active. Add 50–100 ms of forward movement after detecting a junction before executing the turn, to position the pivot over the center of the intersection.",
+        code: {
+          lang: "cpp",
+          snippet: `#define LEFT  0
+#define RIGHT 4
+#define CTR   2
+
+enum Junction { STRAIGHT, LEFT_TURN, RIGHT_TURN, T_JUNC, CROSS, DEAD_END };
+
+Junction detect(int* s) {
+  bool l = s[LEFT] > 500, r = s[RIGHT] > 500, c = s[CTR] > 500;
+  if (!c && !l && !r) return DEAD_END;
+  if (l && r && c)    return CROSS;
+  if (l && c)         return LEFT_TURN;
+  if (r && c)         return RIGHT_TURN;
+  return STRAIGHT;
+}`,
+        },
+      },
+      {
+        title: "Left-Hand Rule navigation",
+        body: "At each junction, follow this priority: 1) Turn left if possible, 2) Go straight if no left, 3) Turn right if no straight, 4) U-turn if dead end. Record each move ('L', 'S', 'R', 'B') in a path array. After reaching the end, simplify the path: any sequence like 'LBR' = 'S' (shortcut), 'LBS' = 'R', 'RBL' = 'S', 'SBL' = 'R', etc.",
+        code: {
+          lang: "cpp",
+          snippet: `char path[64]; int pathLen = 0;
+
+void simplify() {
+  // Combine last 3 moves when middle is B (back/U-turn)
+  if (pathLen < 3 || path[pathLen-2] != 'B') return;
+  int total = 0;
+  char moves[] = {path[pathLen-3], path[pathLen-1]};
+  // angle: L=270, S=0, R=90, B=180
+  int angles[] = {0,0};
+  for (int i=0;i<2;i++) {
+    if(moves[i]=='L') angles[i]=270;
+    else if(moves[i]=='S') angles[i]=0;
+    else if(moves[i]=='R') angles[i]=90;
+    else angles[i]=180;
+  }
+  int combined = (angles[0] + 180 + angles[1]) % 360;
+  char c = combined==0?'S': combined==90?'R': combined==270?'L':'B';
+  path[pathLen-3] = c;
+  pathLen -= 2;
+}`,
+        },
+      },
+      {
+        title: "Speed & timing tips",
+        body: "Slow down to 60–80 PWM when approaching junctions (detect increasing outer sensor activity). Execute turns by running one motor forward and the other in reverse for a fixed time (calibrate to ~90°). Use a short burst of PID line-following after the turn to re-acquire the line. Typical junction turn time: 300–500 ms depending on motor speed and chassis weight.",
+      },
+    ],
+  },
+  {
+    id: "rc_race_bot",
+    label: "RC Race Bot",
+    icon: "🏎️",
+    difficulty: "Intermediate",
+    description: "Remote-controlled high-speed bot using ESP-NOW wireless or RF remote with brushless or brushed motors.",
+    hardware: ["ESP32 (×2 for ESP-NOW)", "BTS7960 / ESC", "Johnson / Brushless motor", "LiPo 11.1 V", "Servo for steering"],
+    problemTags: ["rc_bot", "esp_now", "bts7960", "brushless_esc", "johnson_motor", "wireless"],
+    quickFills: ["ESP-NOW not connecting", "Motor only goes one direction", "Bot drifts left/right", "LiPo brownout under load"],
+    learnSections: [
+      {
+        title: "Architecture overview",
+        body: "An RC bot has two ESP32s: Transmitter (handheld controller) and Receiver (on the bot). They talk over ESP-NOW — a peer-to-peer protocol with ~1 ms latency, no router needed. The transmitter reads joystick/potentiometer values and sends a struct every 20 ms. The receiver unpacks the struct and drives the motor driver and steering servo.",
+      },
+      {
+        title: "ESP-NOW setup",
+        body: "Get the receiver's MAC address by uploading a simple sketch that prints WiFi.macAddress(). Hardcode this in the transmitter. Both boards call WiFi.mode(WIFI_STA) and esp_now_init(). The transmitter registers the receiver as a peer and calls esp_now_send(). The receiver registers a receive callback with esp_now_register_recv_cb().",
+        code: {
+          lang: "cpp",
+          snippet: `// ── Transmitter ──────────────────────────────────────
+#include <esp_now.h>
+#include <WiFi.h>
+
+uint8_t recvMAC[] = {0xAA,0xBB,0xCC,0xDD,0xEE,0xFF}; // replace!
+typedef struct { int throttle; int steering; } Ctrl;
+Ctrl ctrl;
+
+void setup() {
+  WiFi.mode(WIFI_STA);
+  esp_now_init();
+  esp_now_peer_info_t peer{};
+  memcpy(peer.peer_addr, recvMAC, 6);
+  esp_now_add_peer(&peer);
+}
+void loop() {
+  ctrl.throttle = map(analogRead(34), 0, 4095, -255, 255);
+  ctrl.steering = map(analogRead(35), 0, 4095, 0, 180);
+  esp_now_send(recvMAC, (uint8_t*)&ctrl, sizeof(ctrl));
+  delay(20);
+}
+
+// ── Receiver ─────────────────────────────────────────
+typedef struct { int throttle; int steering; } Ctrl;
+Ctrl incoming;
+
+void onRecv(const uint8_t*, const uint8_t* data, int len) {
+  memcpy(&incoming, data, len);
+}
+void setup() {
+  WiFi.mode(WIFI_STA);
+  esp_now_init();
+  esp_now_register_recv_cb(onRecv);
+}`,
+        },
+      },
+      {
+        title: "BTS7960 motor driver wiring",
+        body: `The IBT-2 (BTS7960) module has 6 signal pins:\n• RPWM — forward PWM (0–255)\n• LPWM — reverse PWM (0–255)\n• R_EN — right half-bridge enable (tie to 3.3 V)\n• L_EN — left half-bridge enable (tie to 3.3 V)\n• R_IS, L_IS — current sense (optional, connect to analog pin)\n\nPower: B+ to LiPo positive, GND to common ground. Motor terminals to motor. Never set RPWM and LPWM both > 0 at the same time — this causes a shoot-through fault.`,
+        code: {
+          lang: "cpp",
+          snippet: `const int RPWM=25, LPWM=26;
+
+void driveMotor(int speed) { // -255 to +255
+  if (speed > 0) {
+    ledcWrite(0, speed); // RPWM channel
+    ledcWrite(1, 0);     // LPWM channel
+  } else {
+    ledcWrite(0, 0);
+    ledcWrite(1, -speed);
+  }
+}
+
+void setup() {
+  ledcAttach(RPWM, 1000, 8); // pin, freq, resolution
+  ledcAttach(LPWM, 1000, 8);
+}`,
+        },
+      },
+      {
+        title: "Steering servo + throttle curve",
+        body: "Connect a servo to the steering mechanism. Map incoming steering value (0–180) to the servo angle, centered at 90°. Apply a throttle deadband (±10 around zero) to prevent slow creep. Add an expo curve to make small stick movements gentler at high speed.",
+        code: {
+          lang: "cpp",
+          snippet: `#include <ESP32Servo.h>
+Servo steer;
+
+void setup() { steer.attach(18); }
+
+void loop() {
+  // Deadband
+  int thr = incoming.throttle;
+  if (abs(thr) < 10) thr = 0;
+  driveMotor(thr);
+  steer.write(incoming.steering); // 0–180
+}`,
+        },
+      },
+      {
+        title: "LiPo safety",
+        body: "A 3S LiPo (11.1 V nominal) must never discharge below 3.0 V/cell (9.0 V total) or it suffers permanent capacity loss. Add a LiPo alarm buzzer to the balance connector — it beeps when any cell drops below 3.5 V. Use XT60 connectors (rated to 60 A) for the main power leads. Always add a main power switch and a fuse (30–40 A blade fuse) in the positive lead.",
+      },
+    ],
+  },
+  {
+    id: "soccer_bot",
+    label: "Soccer Bot",
+    icon: "⚽",
+    difficulty: "Advanced",
+    description: "Competitive soccer robot with IR ball tracking, opponent detection, and differential drive.",
+    hardware: ["Arduino Mega / ESP32", "BTS7960 dual H-bridge", "Johnson 550 motors", "IR ball sensor", "LiPo 11.1 V"],
+    problemTags: ["soccer_bot", "bts7960", "johnson_motor", "esp_now", "ir_ball", "differential"],
+    quickFills: ["Bot spins in place", "Motors going same direction", "Ball not detected", "ESP-NOW latency too high"],
+    learnSections: [
+      {
+        title: "How it works",
+        body: "A soccer bot uses an IR 1200 Hz ball (standard in RoboCup Jr) and a ring of IR receivers (TSOP1140 or SFH5110-38) to detect the ball direction. It uses differential drive (two powered wheels, one caster) to navigate and dribble. The attacker always chases the ball and shoots; the defender stays near the goal and intercepts.",
+      },
+      {
+        title: "IR ball detection ring",
+        body: `Mount 8–16 TSOP1140 IR receivers evenly around the robot perimeter facing outward. The ball transmits at 1200 Hz. Each receiver outputs LOW when it sees the ball signal. The strongest signal (or the pair of receivers that both see signal) indicates ball direction. Multiply by 45° (for 8 sensors) to get the bearing.\n\nAlternative: use a commercial IR ball sensor module (like the one from RoboCup kits) that outputs a 4-bit direction code over I2C.`,
+        code: {
+          lang: "cpp",
+          snippet: `const int IR_PINS[] = {22,23,24,25,26,27,28,29}; // 8 sensors
+const int DIRS[]    = {0, 45, 90,135,180,225,270,315};
+
+int ballDirection() {
+  int best = -1, bestCount = 0;
+  for (int i=0; i<8; i++) {
+    if (digitalRead(IR_PINS[i]) == LOW) { // active low
+      if (++bestCount > best) { best = bestCount; bestI = i; }
+    }
+  }
+  return best == -1 ? -1 : DIRS[bestI];
+}`,
+        },
+      },
+      {
+        title: "Differential drive for omnidirectional movement",
+        body: "Standard differential drive (2 wheels) can only move forward/backward and turn. For soccer, consider a 3-wheel or 4-wheel omnidirectional drive with omni-wheels — this allows sideways movement. With 4 omni-wheels at 45°, you can move in any direction without turning. Each wheel gets its own motor driver and PWM. The math: decompose desired velocity vector into wheel speeds using rotation matrices.",
+        code: {
+          lang: "cpp",
+          snippet: `// 4-wheel omnidirectional — wheel angles: 45, 135, 225, 315°
+void omniDrive(float vx, float vy, float omega) {
+  // vx: right, vy: forward, omega: CCW rotation
+  float w[4];
+  w[0] =  vx + vy + omega; // front-right (45°)
+  w[1] = -vx + vy + omega; // front-left  (135°)
+  w[2] = -vx - vy + omega; // back-left   (225°)
+  w[3] =  vx - vy + omega; // back-right  (315°)
+  // Scale to -255..255 and write to motor drivers
+  float maxW = max({abs(w[0]),abs(w[1]),abs(w[2]),abs(w[3]),1.0f});
+  for (int i=0;i<4;i++) setMotor(i, (int)(w[i]/maxW*255));
+}`,
+        },
+      },
+      {
+        title: "Attacker strategy",
+        body: "Simple attacker logic: 1) Face the ball (turn until ball is at 0°), 2) Drive toward ball, 3) When ball is close and goal is roughly ahead, sprint forward (shoot). Use the compass module (HMC5883L or QMC5883L over I2C) to know absolute heading so you always know which direction is 'goal'. Add a dribbler bar (a small spinning roller) at the front to control the ball.",
+      },
+      {
+        title: "ESP-NOW multi-robot communication",
+        body: "In a 2v2 game, robots can coordinate over ESP-NOW. The attacker broadcasts its position and ball bearing; the defender uses this to position itself. Keep packets small (< 20 bytes) and send at 20–50 Hz. Use separate WiFi channels if running two teams in the same venue. Add a 3-second timeout: if no packet received, act independently.",
+      },
+    ],
+  },
+  {
+    id: "pick_and_place",
+    label: "Pick & Place Bot",
+    icon: "🦾",
+    difficulty: "Advanced",
+    description: "Robotic arm on a chassis that picks and places objects using servos and DC motors.",
+    hardware: ["Arduino Mega / Uno", "Adafruit Motor Shield v2", "MG996R servos (×3–4)", "L293D / L298N", "12 V DC supply"],
+    problemTags: ["pick_place", "servo_mg996r", "afmotor", "timer_conflict", "i2c"],
+    quickFills: ["Servo jitters with motors running", "AFMotor + Servo conflict", "Arm overshoots position", "Servo buzzes at rest"],
+    learnSections: [
+      {
+        title: "How it works",
+        body: "A pick & place bot has two systems: a mobile chassis (DC motors) and a robotic arm (servos). The arm typically has 3–4 degrees of freedom: base rotation, shoulder, elbow, and gripper. The bot drives to a target position, positions the arm over the object, closes the gripper, then drives to the drop zone and releases. Simple implementations use fixed pre-programmed positions.",
+      },
+      {
+        title: "Arm design & servo selection",
+        body: `3-DOF arm for a small pick & place:\n• Base rotation — MG996R (metal gear, 10 kg·cm)\n• Shoulder — MG996R (takes most load)\n• Elbow — SG90 or MG90S (lighter load)\n• Gripper — SG90 (open/close only)\n\nMount the shoulder servo as low as possible to reduce torque on the base. Use servo brackets (aluminum "U" channels) for rigid links. Keep the arm lightweight — each extra 10 g at the tip adds ~1 kg·cm of torque on the shoulder at full extension (30 cm arm = 3 kg·cm extra load).`,
+      },
+      {
+        title: "Motor Shield v2 setup",
+        body: "Use the Adafruit Motor Shield v2 (PCA9685 I2C) to avoid the Timer 1 conflict with the Servo library. The shield controls up to 4 DC motors and 2 steppers via I2C — no timer conflicts with servos. Stack the shield on the Arduino Mega. Default I2C address is 0x60 (change A0–A4 solder pads to run multiple shields).",
+        code: {
+          lang: "cpp",
+          snippet: `#include <Adafruit_MotorShield.h>
+#include <Servo.h>
+
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+Adafruit_DCMotor *motorL = AFMS.getMotor(1);
+Adafruit_DCMotor *motorR = AFMS.getMotor(2);
+
+Servo shoulder, elbow, gripper;
+
+void setup() {
+  AFMS.begin(); // I2C — no Timer 1 conflict
+  shoulder.attach(9);
+  elbow.attach(10);
+  gripper.attach(11);
+  motorL->setSpeed(200);
+  motorR->setSpeed(200);
+}`,
+        },
+      },
+      {
+        title: "Inverse kinematics (simple 2-link arm)",
+        body: "For a 2-link arm (shoulder + elbow), given a target (x, y) position, use geometry to find joint angles. Let L1 = upper arm length, L2 = forearm length. The elbow angle uses the law of cosines. The shoulder angle combines the base angle and elbow contribution. This is 2D IK for a planar arm.",
+        code: {
+          lang: "cpp",
+          snippet: `#include <math.h>
+const float L1 = 12.0, L2 = 10.0; // cm
+
+bool solveIK(float x, float y, float &a1, float &a2) {
+  float d = sqrt(x*x + y*y);
+  if (d > L1+L2 || d < abs(L1-L2)) return false; // unreachable
+  float cosA2 = (x*x + y*y - L1*L1 - L2*L2) / (2*L1*L2);
+  a2 = acos(cosA2);                            // elbow angle
+  float k1 = L1 + L2*cos(a2), k2 = L2*sin(a2);
+  a1 = atan2(y, x) - atan2(k2, k1);           // shoulder angle
+  a1 = a1 * 180.0 / M_PI;
+  a2 = a2 * 180.0 / M_PI;
+  return true;
+}`,
+        },
+      },
+      {
+        title: "Smooth movement & sequence",
+        body: "Move servos slowly to avoid jerky motion that stresses gears. Interpolate from current angle to target over 30–50 steps with a 10–20 ms delay each step. Use a simple state machine: DRIVE_TO_PICK → LOWER_ARM → CLOSE_GRIP → RAISE_ARM → DRIVE_TO_PLACE → LOWER_ARM → OPEN_GRIP → RAISE_ARM → IDLE.",
+        code: {
+          lang: "cpp",
+          snippet: `void servoSlowMove(Servo& sv, int from, int to, int stepDelay=15) {
+  int step = (to > from) ? 1 : -1;
+  for (int pos = from; pos != to; pos += step) {
+    sv.write(pos);
+    delay(stepDelay);
+  }
+  sv.write(to);
+}`,
+        },
+      },
+    ],
+  },
+  {
+    id: "pid_reference",
+    label: "PID Controller",
+    icon: "📐",
+    difficulty: "Intermediate",
+    description: "Reference guide for PID tuning — Kp, Ki, Kd methodology, integral windup, and derivative filter.",
+    hardware: ["Any MCU", "Motor driver", "Encoder or sensor feedback"],
+    problemTags: ["pid", "kp", "ki", "kd", "tuning", "windup", "oscillation"],
+    quickFills: ["Bot oscillates (Kp too high)", "Consistent drift (add Ki)", "Overshoot / wobble (add Kd)", "Integral windup runaway"],
+    learnSections: [
+      {
+        title: "What is PID?",
+        body: "PID stands for Proportional-Integral-Derivative. It's a feedback control algorithm that calculates a correction based on the difference between a desired setpoint and a measured value (the error).\n\n• P (Proportional) — correction proportional to current error. Big error → big correction.\n• I (Integral) — correction based on accumulated error over time. Fixes persistent drift.\n• D (Derivative) — correction based on rate of error change. Dampens overshoots.\n\nThe output = Kp×error + Ki×∫error + Kd×(d error/dt)",
+      },
+      {
+        title: "Tuning Kp — Proportional",
+        body: "Start with Ki=0, Kd=0. Increase Kp from 0 until the system responds but oscillates. Reduce by ~30%. This is your working Kp. Too low → sluggish response, won't reach setpoint. Too high → oscillates around setpoint. For a line follower on a 0–4000 position scale, typical Kp = 0.2–0.8.",
+        code: {
+          lang: "cpp",
+          snippet: `// Minimal P controller
+float Kp = 0.4;
+
+void loop() {
+  float error = setpoint - measure();
+  float output = Kp * error;
+  actuate(output);
+  delay(10); // 100 Hz loop
+}`,
+        },
+      },
+      {
+        title: "Tuning Ki — Integral",
+        body: "After Kp is set, if there's a steady-state offset (system never quite reaches setpoint), add Ki. Start very small (0.0001–0.001). The integral sums error over time — even a small offset will grow until corrected. Too much Ki → slow oscillation that grows over time (integral windup). Always clamp the integral to a max value.",
+        code: {
+          lang: "cpp",
+          snippet: `float Kp=0.4, Ki=0.001;
+float integral=0;
+const float I_MAX = 200;
+
+void loop() {
+  float err = setpoint - measure();
+  integral = constrain(integral + err, -I_MAX, I_MAX);
+  float out = Kp*err + Ki*integral;
+  actuate(out);
+  delay(10);
+}`,
+        },
+      },
+      {
+        title: "Tuning Kd — Derivative",
+        body: "Kd looks at how fast the error is changing. If error is rapidly decreasing, Kd reduces the correction to prevent overshoot. Start with Kd ≈ 5–10× Kp. Too much Kd amplifies noise — apply a low-pass filter on the derivative. Kd is most useful for fast systems (line followers, balance bots) and less needed for slow thermal or position loops.",
+        code: {
+          lang: "cpp",
+          snippet: `float Kp=0.4, Ki=0.001, Kd=2.0;
+float integral=0, lastErr=0, filtered=0;
+
+void loop() {
+  float err = setpoint - measure();
+  integral = constrain(integral + err, -200, 200);
+  // Low-pass filter on derivative (alpha=0.3)
+  filtered = 0.7*filtered + 0.3*err;
+  float deriv = filtered - lastErr;
+  lastErr = filtered;
+  float out = Kp*err + Ki*integral + Kd*deriv;
+  actuate(out);
+  delay(10);
+}`,
+        },
+      },
+      {
+        title: "Common issues & anti-windup",
+        body: `Problem: Bot oscillates → Kp too high. Reduce by 30%.\nProblem: Bot undershoots / drifts → Kp too low or Ki needed.\nProblem: Bot overshoots on approach → Kd too low or Kp too high.\nProblem: Slow growing oscillation → Ki too high or integral not clamped.\nProblem: Jitter / noise → Kd too high or missing derivative filter.\n\nAnti-windup: clamp the integral term. Also reset integral to 0 when error crosses zero (reset-on-zero). For motor control, clamp integral when motor is already at max output (clamping anti-windup).`,
+        code: {
+          lang: "cpp",
+          snippet: `// Clamping anti-windup: don't accumulate if output is saturated
+float out_unclamped = Kp*err + Ki*integral + Kd*deriv;
+float out = constrain(out_unclamped, -255, 255);
+// Only integrate if output is not saturated
+if (out == out_unclamped) {
+  integral += err;
+}`,
+        },
+      },
     ],
   },
 ];
@@ -1969,6 +2605,432 @@ function connect(url: string) {
 }`,
     },
   },
+
+  // ══ BOT / ROBOTICS ═════════════════════════════════════════════════════════
+
+  // ── IR Sensor Array ────────────────────────────────────────────────────────
+  {
+    id: "ir-array-all-same",
+    title: "IR sensor array reads same value on all channels",
+    description:
+      "All channels of a 5-ch or 8-ch IR array return the same analog/digital value regardless of surface.",
+    tags: [
+      "ir_array", "ir_array_5ch", "ir_array_8ch", "tcrt5000_single",
+      "line_follower", "maze_solver",
+      "uno", "nano", "mega",
+      "calibration", "analog", "sensor",
+    ],
+    steps: [
+      "Check VCC — IR arrays need a stable 5 V supply; power from Arduino 5 V pin, not 3.3 V",
+      "Verify each emitter LED is lit (look through phone camera — IR shows as purple glow)",
+      "Check common GND between sensor array and MCU",
+      "Test one sensor in isolation with Serial.println(analogRead(A0)) over a white and black surface",
+      "Adjust sensor height — optimal is 5–10 mm from surface; too far gives flat readings",
+      "If analog values are stuck at 1023 or 0, check pull-down/pull-up resistors or use the digital output instead",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `// Quick calibration check — print all 5 channels
+const int IR_PINS[] = {A0, A1, A2, A3, A4};
+void setup() { Serial.begin(115200); }
+void loop() {
+  for (int i = 0; i < 5; i++) {
+    Serial.print(analogRead(IR_PINS[i]));
+    Serial.print("\\t");
+  }
+  Serial.println();
+  delay(100);
+}`,
+    },
+  },
+  {
+    id: "ir-array-ambient-interference",
+    title: "IR sensor gives noisy / inconsistent readings in sunlight",
+    description:
+      "Direct sunlight or bright ambient light saturates IR phototransistors, causing erratic line detection.",
+    tags: [
+      "ir_array", "ir_array_5ch", "ir_array_8ch", "tcrt5000_single",
+      "line_follower", "maze_solver", "ambient", "noise", "sunlight",
+    ],
+    steps: [
+      "Shield the sensor array from direct sunlight with a skirt made of cardboard or black foam",
+      "Increase emitter LED brightness — some modules have a trim pot to adjust current",
+      "Use digital threshold output instead of raw analog; set threshold slightly above ambient noise floor",
+      "Implement dynamic calibration: scan over white then black at startup and store min/max per channel",
+      "For QTR-8A, use the QTRSensors library — it supports emitter on/off calibration automatically",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `// Dynamic calibration with QTRSensors library
+#include <QTRSensors.h>
+QTRSensors qtr;
+const uint8_t SENSOR_COUNT = 8;
+uint16_t sensorValues[SENSOR_COUNT];
+
+void setup() {
+  qtr.setTypeAnalog();
+  qtr.setSensorPins((const uint8_t[]){A0,A1,A2,A3,A4,A5,A6,A7}, SENSOR_COUNT);
+  // Calibrate — move robot over line for 2 seconds
+  for (uint16_t i = 0; i < 400; i++) {
+    qtr.calibrate();
+    delay(20);
+  }
+}
+void loop() {
+  uint16_t pos = qtr.readLineBlack(sensorValues); // 0–7000
+}`,
+    },
+  },
+
+  // ── PID Tuning ────────────────────────────────────────────────────────────
+  {
+    id: "pid-oscillation-kp-too-high",
+    title: "Line follower oscillates / zig-zags — Kp too high",
+    description:
+      "Robot overcorrects left and right around the line, getting worse as speed increases. Classic sign of proportional gain too high.",
+    tags: [
+      "pid", "kp", "oscillation", "line_follower", "tuning",
+      "ir_array", "ir_array_5ch", "ir_array_8ch", "n20_motor", "l298n", "tb6612fng",
+    ],
+    steps: [
+      "Start with Kp=0.1, Ki=0, Kd=0 and increase Kp slowly until the bot follows the line",
+      "The moment it starts oscillating, reduce Kp by 30–50%",
+      "Increase base speed gradually — you may need to re-tune Kp at higher speeds",
+      "Do NOT add Ki or Kd until Kp gives stable (but possibly drifty) tracking",
+      "Log the error value via Serial to visualize oscillation amplitude",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `float Kp = 0.4, Ki = 0.0, Kd = 0.0;
+float lastError = 0, integral = 0;
+int baseSpeed = 120; // 0–255
+
+void loop() {
+  int pos = readLinePosition(); // returns -2 to +2 (or 0–7000 for QTR)
+  float error = pos; // center = 0
+  integral += error;
+  float derivative = error - lastError;
+  float correction = Kp*error + Ki*integral + Kd*derivative;
+  lastError = error;
+  int leftSpeed  = constrain(baseSpeed + correction, 0, 255);
+  int rightSpeed = constrain(baseSpeed - correction, 0, 255);
+  setMotors(leftSpeed, rightSpeed);
+}`,
+    },
+  },
+  {
+    id: "pid-drift-ki-needed",
+    title: "Line follower drifts consistently to one side",
+    description:
+      "Robot tracks the line but slowly drifts to one side, especially on straight sections. Accumulated steady-state error needs integral term.",
+    tags: [
+      "pid", "ki", "drift", "line_follower", "tuning", "integral", "windup",
+      "ir_array", "n20_motor", "l298n",
+    ],
+    steps: [
+      "Add Ki starting at 0.0001 — integral error accumulates over many samples so it needs a tiny value",
+      "Watch for integral windup: clamp integral to ±50 or ±100 to prevent runaway",
+      "If the bot starts oscillating after adding Ki, reduce Ki or add the clamp",
+      "Check motor symmetry — if one motor is weaker, it causes one-sided drift that Kp alone can't fix",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `// Anti-windup clamp
+const float INTEGRAL_MAX = 100.0;
+integral = constrain(integral + error, -INTEGRAL_MAX, INTEGRAL_MAX);`,
+    },
+  },
+  {
+    id: "pid-overshoot-kd-needed",
+    title: "Line follower overshoots on curves / wobbles after correction",
+    description:
+      "Robot handles straight lines well but overshoots on curves or wobbles briefly after corrections — derivative term reduces this.",
+    tags: [
+      "pid", "kd", "overshoot", "line_follower", "tuning", "derivative",
+      "ir_array", "n20_motor",
+    ],
+    steps: [
+      "Add Kd starting at 1–5 × Kp value",
+      "Kd damps sharp error changes — it reduces the overshoot on curve entry",
+      "Too much Kd causes jitter/noise amplification — reduce if motors stutter",
+      "Apply a simple low-pass filter on error before feeding to derivative: filtered = 0.7*filtered + 0.3*raw",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `// Low-pass filter on derivative
+float filteredError = 0;
+// In loop:
+filteredError = 0.7 * filteredError + 0.3 * error;
+float derivative = filteredError - lastError;
+lastError = filteredError;`,
+    },
+  },
+
+  // ── BTS7960 Motor Driver ───────────────────────────────────────────────────
+  {
+    id: "bts7960-not-spinning",
+    title: "BTS7960 motor not spinning — IBT-2 module",
+    description:
+      "Motor connected to BTS7960 (IBT-2 board) doesn't move even though MCU pins are set.",
+    tags: [
+      "bts7960", "rc_bot", "soccer_bot", "motor", "pwm",
+      "esp32", "uno", "mega", "nano",
+    ],
+    steps: [
+      "The IBT-2 module has 6 control pins: RPWM, LPWM, R_EN, L_EN, R_IS, L_IS",
+      "Both R_EN and L_EN must be HIGH (or tied to VCC) to enable the driver",
+      "RPWM controls forward direction (0–255 PWM), LPWM controls reverse — never set both > 0 at the same time",
+      "Supply voltage must be connected to the B+ terminal and motor to B- / motor terminals — check wiring",
+      "Verify PWM frequency: keep below 20 kHz; Arduino default ~490 Hz on most pins is fine",
+      "Check the status pins R_IS / L_IS — if current exceeds limit they go HIGH (overcurrent protection)",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `// BTS7960 (IBT-2) control
+const int RPWM = 5, LPWM = 6;
+const int R_EN = 7, L_EN = 8;
+
+void setup() {
+  pinMode(RPWM, OUTPUT); pinMode(LPWM, OUTPUT);
+  pinMode(R_EN, OUTPUT); pinMode(L_EN, OUTPUT);
+  digitalWrite(R_EN, HIGH); digitalWrite(L_EN, HIGH);
+}
+
+void driveForward(int speed) {  // speed 0-255
+  analogWrite(RPWM, speed);
+  analogWrite(LPWM, 0);
+}
+void driveReverse(int speed) {
+  analogWrite(RPWM, 0);
+  analogWrite(LPWM, speed);
+}
+void stop() {
+  analogWrite(RPWM, 0);
+  analogWrite(LPWM, 0);
+}`,
+    },
+  },
+  {
+    id: "bts7960-one-direction",
+    title: "BTS7960 motor only goes one direction",
+    description:
+      "Motor spins forward with RPWM but reverse with LPWM does nothing, or vice versa.",
+    tags: [
+      "bts7960", "rc_bot", "soccer_bot", "motor", "direction",
+      "uno", "mega", "esp32",
+    ],
+    steps: [
+      "Verify LPWM pin is actually outputting PWM — use a multimeter in AC mode or oscilloscope",
+      "Ensure R_EN and L_EN are both HIGH — if only one is HIGH the corresponding half-bridge is disabled",
+      "Check if the motor is mechanically blocked in one direction (gear jam)",
+      "Swap RPWM and LPWM pins in code if direction is reversed from expectation",
+      "Try connecting RPWM to GND and LPWM to PWM to confirm the reverse half-bridge works",
+    ],
+  },
+
+  // ── ESP-NOW ────────────────────────────────────────────────────────────────
+  {
+    id: "esp-now-not-connecting",
+    title: "ESP-NOW peers not connecting / no data received",
+    description:
+      "Two ESP32s can't establish ESP-NOW communication — send callback returns failure or receiver callback never fires.",
+    tags: [
+      "esp_now", "esp32", "rc_bot", "soccer_bot", "wireless", "mac", "peer",
+    ],
+    steps: [
+      "Both boards must use the same WiFi channel. Call WiFi.disconnect() and don't use STA mode alongside ESP-NOW unless you set the channel explicitly",
+      "Get the receiver's exact MAC address via WiFi.macAddress() printed to Serial — any byte error means no connection",
+      "Register the peer BEFORE calling esp_now_send()",
+      "Both sender and receiver must call esp_now_init() successfully (returns ESP_OK)",
+      "The data struct on sender and receiver must be the same size — use #pragma pack or identical struct definitions",
+      "If using encrypted ESP-NOW, both must call esp_now_set_pmk() with the same key",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `#include <esp_now.h>
+#include <WiFi.h>
+
+uint8_t receiverMAC[] = {0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF}; // replace!
+
+typedef struct { int throttle; int steering; } Packet;
+Packet data;
+
+void onSent(const uint8_t *mac, esp_now_send_status_t status) {
+  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "OK" : "FAIL");
+}
+
+void setup() {
+  WiFi.mode(WIFI_STA);
+  esp_now_init();
+  esp_now_register_send_cb(onSent);
+  esp_now_peer_info_t peer = {};
+  memcpy(peer.peer_addr, receiverMAC, 6);
+  peer.channel = 0; peer.encrypt = false;
+  esp_now_add_peer(&peer);
+}
+
+void loop() {
+  data.throttle = 200; data.steering = 0;
+  esp_now_send(receiverMAC, (uint8_t *)&data, sizeof(data));
+  delay(20);
+}`,
+    },
+  },
+
+  // ── Differential Drive ─────────────────────────────────────────────────────
+  {
+    id: "motors-same-direction",
+    title: "Both motors spin the same direction — bot spins instead of going straight",
+    description:
+      "In a differential-drive bot, left and right motors are mechanically mirrored — one must be inverted in code or wiring.",
+    tags: [
+      "differential", "line_follower", "maze_solver", "rc_bot", "soccer_bot",
+      "l298n", "tb6612fng", "bts7960", "n20_motor", "tt_motor",
+    ],
+    steps: [
+      "One motor is physically mounted facing the opposite direction — its wires must be swapped or logic inverted",
+      "In code: if left motor uses IN1/IN2, simply swap the HIGH/LOW values for that motor",
+      "Test each motor independently before combining: set one motor at a time and observe rotation direction",
+      "Convention: positive speed = forward for both; define a setMotors(left, right) function that handles inversion internally",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `void setMotors(int left, int right) {
+  // Right motor is mounted reversed — invert its value
+  right = -right;
+  // Left motor (L298N IN1/IN2 + ENA)
+  digitalWrite(IN1, left >= 0 ? HIGH : LOW);
+  digitalWrite(IN2, left >= 0 ? LOW : HIGH);
+  analogWrite(ENA, abs(left));
+  // Right motor (L298N IN3/IN4 + ENB)
+  digitalWrite(IN3, right >= 0 ? HIGH : LOW);
+  digitalWrite(IN4, right >= 0 ? LOW : HIGH);
+  analogWrite(ENB, abs(right));
+}`,
+    },
+  },
+
+  // ── Timer Conflict ─────────────────────────────────────────────────────────
+  {
+    id: "afmotor-servo-timer-conflict",
+    title: "AFMotor.h + Servo.h causes servos to jitter or motors to stall",
+    description:
+      "Adafruit Motor Shield library (AFMotor) uses Timer 1 on Arduino Uno/Nano. The Servo library also uses Timer 1, causing conflicts that make servos jitter or PWM motor speed wrong.",
+    tags: [
+      "afmotor", "pick_place", "servo_mg996r", "servo_sg90", "timer_conflict",
+      "uno", "nano", "mega", "timer", "pwm",
+    ],
+    steps: [
+      "On Arduino Uno/Nano: AFMotor uses Timer 1 and Timer 2; Servo also uses Timer 1 → conflict",
+      "Solution 1 (Mega): use Arduino Mega which has Timers 3, 4, 5 — Servo and AFMotor coexist without conflict",
+      "Solution 2: Replace AFMotor with direct L293D control using analogWrite — no library timers needed",
+      "Solution 3: Use Adafruit Motor Shield v2 (I2C-based PCA9685) — no timer conflict at all",
+      "Never include both <AFMotor.h> and <Servo.h> on Uno for simultaneous use",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `// ✗ Conflict on Uno/Nano:
+// #include <AFMotor.h>
+// #include <Servo.h>
+
+// ✓ Solution: Use AFMotor Shield v2 (I2C)
+#include <Adafruit_MotorShield.h>
+#include <Servo.h>  // Safe — no timer conflict with v2 shield
+
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+Adafruit_DCMotor *motor = AFMS.getMotor(1);
+Servo gripper;
+
+void setup() {
+  AFMS.begin();
+  gripper.attach(9);
+}`,
+    },
+  },
+
+  // ── Maze Solver ────────────────────────────────────────────────────────────
+  {
+    id: "maze-junction-not-detected",
+    title: "Maze solver misses junctions — T or cross intersections skipped",
+    description:
+      "Robot fails to detect T-junctions or crossroads and drives straight through, making the left-hand rule fail.",
+    tags: [
+      "maze_solver", "junction", "ir_array", "ir_array_5ch", "ir_array_8ch",
+      "line_follower", "uno", "nano", "mega",
+    ],
+    steps: [
+      "Junctions are detected by the outermost sensors — ensure you're reading sensors 0 and 4 (or 0 and 7 for 8-ch)",
+      "A T-junction appears as: left-outer OR right-outer sensor goes HIGH while center is also HIGH",
+      "Increase polling rate — if the robot is fast, sample sensors every 5–10 ms and buffer readings",
+      "Add a small delay (50–100 ms) after junction detection before executing the turn, to position the pivot point over the junction",
+      "Reduce speed approaching intersections using the same PID correction magnitude as a signal",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `bool isJunction(int* s, int n) {
+  // s[0] = leftmost, s[n-1] = rightmost
+  bool leftHigh  = s[0] > 700;
+  bool rightHigh = s[n-1] > 700;
+  bool centerHigh = s[n/2] > 700;
+  return (leftHigh || rightHigh) && centerHigh;
+}
+
+// In loop:
+if (isJunction(sensorValues, 5)) {
+  handleJunction(); // turn left, right, or go straight
+}`,
+    },
+  },
+
+  // ── Power / LiPo ──────────────────────────────────────────────────────────
+  {
+    id: "lipo-brownout-motors",
+    title: "MCU resets when motors start — LiPo voltage sag",
+    description:
+      "Arduino or ESP32 resets or behaves erratically the moment drive motors are powered, due to voltage drop on the battery.",
+    tags: [
+      "power", "brownout", "lipo", "rc_bot", "soccer_bot", "line_follower",
+      "bts7960", "l298n", "tb6612fng", "johnson_motor", "n20_motor",
+      "esp32", "uno", "nano", "mega",
+    ],
+    steps: [
+      "Never power the MCU from the same LiPo cell that drives motors — use a separate 5 V BEC or buck converter",
+      "Add a 1000 µF capacitor across the motor driver's power input to absorb current spikes",
+      "Use a LiPo with adequate C-rating: minimum 25C for race bots (capacity_Ah × 25C = peak amps)",
+      "Check battery wiring — thin wires add resistance and cause voltage drops; use 18 AWG or thicker",
+      "For ESP32: set brownout threshold lower with esp_brownout_init() or disable in sdkconfig (temporary workaround only)",
+    ],
+    code: {
+      lang: "cpp",
+      snippet: `// Disable ESP32 brownout detector (temporary debug only)
+#include "soc/soc.h"
+#include "soc/rtc_cntl_reg.h"
+
+void setup() {
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); // disable brownout
+  // ⚠️ Re-enable in production — this can damage the ESP32
+}`,
+    },
+  },
+
+  // ── N20 / Geared Motors ───────────────────────────────────────────────────
+  {
+    id: "n20-grinding-noise",
+    title: "N20 geared motor makes grinding noise or loses steps",
+    description:
+      "N20 motor produces grinding/clicking sounds under load, or slows and stalls when robot pushes against obstacle.",
+    tags: [
+      "n20_motor", "line_follower", "maze_solver", "motor", "grinding",
+      "l298n", "tb6612fng", "power",
+    ],
+    steps: [
+      "N20 motors have plastic gears — stalling under high load strips the gears; avoid prolonged stalls",
+      "Implement current limiting: if motor stalls (encoder stops but PWM is high), cut power immediately",
+      "Check supply voltage: N20 motors run optimally at their rated voltage (3–6 V or 6–12 V variant)",
+      "Reduce base speed when turning — sharp turns at high speed overload the inner wheel motor",
+      "If grinding happens at startup, add a slow ramp-up from 0 to target speed over 200 ms",
+    ],
+  },
 ];
 
 // ── Search ───────────────────────────────────────────────────────────────────
@@ -2015,6 +3077,40 @@ export function searchProblems(
       if (activeTags.has(tag)) score += 2;
     }
     // Score by query tokens
+    for (const token of tokens) {
+      for (const tag of p.tags) {
+        if (tag === token) score += 3;
+        else if (tag.includes(token) || token.includes(tag)) score += 1;
+      }
+      for (const word of tokenize(p.title)) {
+        if (word === token) score += 2;
+        else if (word.includes(token) || token.includes(word)) score += 1;
+      }
+    }
+    return { problem: p, score };
+  });
+
+  return scored
+    .filter((s) => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((s) => s.problem);
+}
+
+/** Search problems relevant to a specific bot using its problemTags + optional query. */
+export function searchBotProblems(bot: Bot, query: string, limit = 8): Problem[] {
+  const botTagSet = new Set<string>(bot.problemTags);
+  const pool = ALL_PROBLEMS.filter((p) =>
+    p.tags.some((t) => botTagSet.has(t))
+  );
+  if (!query.trim()) return pool.slice(0, limit);
+
+  const tokens = tokenize(query);
+  const scored = pool.map((p) => {
+    let score = 0;
+    for (const tag of p.tags) {
+      if (botTagSet.has(tag)) score += 2;
+    }
     for (const token of tokens) {
       for (const tag of p.tags) {
         if (tag === token) score += 3;
