@@ -27,28 +27,30 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen flex flex-col">
+      <body className="min-h-screen flex flex-col bg-gray-50/50">
         <div className="flex-grow">{children}</div>
-        <footer className="site-footer py-10">
-          <div className="mx-auto max-w-5xl px-6 lg:px-8">
-            <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
+        <footer className="w-full border-t border-indigo-100/40 bg-white/40 backdrop-blur-md py-10">
+          <div className="mx-auto max-w-6xl px-8 flex flex-col gap-8 md:flex-row items-center justify-between">
+            <div className="flex flex-col gap-2 items-center md:items-start text-center md:text-left">
               <div className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-sm">
-                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-100 ring-2 ring-white/10">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                     <path
-                      d="M7 1L8.5 4.8L12.5 5.1L9.8 7.5L10.7 11.5L7 9.4L3.3 11.5L4.2 7.5L1.5 5.1L5.5 4.8L7 1Z"
+                      d="M8 1.5L9.7 5.5L14 5.8L11 8.5L12 13L8 10.7L4 13L5 8.5L2 5.8L6.3 5.5L8 1.5Z"
                       fill="white"
                     />
                   </svg>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">ProtoDebug</p>
-                  <p className="text-xs text-gray-400">AI-Powered Debugging</p>
-                </div>
+                <span className="text-[17px] font-black text-gray-900 tracking-tight">
+                  ProtoDebug
+                </span>
               </div>
-              <p className="text-sm leading-5 text-gray-500">
-                &copy; {new Date().getFullYear()} <span className="font-semibold text-gray-700">sathwik shetty</span>. All rights reserved.
-              </p>
+              <p className="text-xs text-gray-400 font-bold tracking-tight uppercase">AI-Powered Debugging System</p>
+            </div>
+            
+            <div className="flex flex-col gap-2 items-center md:items-end text-center md:text-right">
+              <p className="text-xs font-black text-gray-500 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100/50 shadow-sm">&copy; {new Date().getFullYear()} sathwik shetty</p>
+              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Innovation Labs — Bengaluru, India</p>
             </div>
           </div>
         </footer>
