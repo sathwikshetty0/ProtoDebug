@@ -12,6 +12,7 @@ import {
 import Header from "@/app/components/header";
 import { ResultsList } from "@/app/components/problem-card";
 import AiAssistant from "@/app/components/ai-assistant";
+import HardwareVisualizer from "@/app/components/hardware-visualizer";
 
 const MCU_GROUPS = Array.from(new Set(MICROCONTROLLERS.map((m) => m.group)));
 
@@ -140,6 +141,11 @@ export default function IotPage() {
             ))}
           </div>
         </section>
+
+        {/* Step 1.5: Visualization */}
+        {selectedMcu && (
+          <HardwareVisualizer mcu={selectedMcu} />
+        )}
 
         {/* Step 2: Components */}
         {selectedMcu && (
