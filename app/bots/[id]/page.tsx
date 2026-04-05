@@ -12,7 +12,7 @@ type Tab = "learn" | "debug";
 function LearnCard({ section, index }: { section: LearnSection; index: number }) {
   const [open, setOpen] = useState(index === 0);
   return (
-    <div className="section-card rounded-2xl overflow-hidden animate-scale-up">
+    <div className="section-card dark:bg-zinc-900/50 rounded-2xl overflow-hidden animate-scale-up border border-indigo-50/40 dark:border-white/5">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-5 sm:px-6 py-5 text-left hover:bg-gray-50/80 active:bg-gray-100/60 transition-colors duration-200 gap-4"
@@ -21,21 +21,21 @@ function LearnCard({ section, index }: { section: LearnSection; index: number })
           <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-indigo-100 to-indigo-50 text-indigo-600 text-[11px] font-bold shrink-0 shadow-sm shadow-indigo-200">
             {index + 1}
           </span>
-          <p className="text-sm font-bold text-gray-900 leading-snug">{section.title}</p>
+          <p className="text-sm font-black text-black dark:text-white leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">{section.title}</p>
         </div>
-        <span className={`text-gray-400 text-xs shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}>
+        <span className={`text-gray-400 dark:text-gray-500 text-xs shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}>
           ▼
         </span>
       </button>
 
       {open && (
-        <div className="border-t border-gray-100 px-5 sm:px-6 py-6 flex flex-col gap-5 animate-fade-in">
+        <div className="border-t border-gray-100 dark:border-white/10 px-5 sm:px-6 py-6 flex flex-col gap-5 animate-fade-in">
           <div className="flex flex-col gap-3">
             {section.body.split("\n").map((line, i) =>
               line.trim() === "" ? (
                 <div key={i} className="h-2" />
               ) : (
-                <p key={i} className="text-sm text-gray-700 leading-relaxed font-medium">
+                <p key={i} className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
                   {line}
                 </p>
               )
@@ -116,14 +116,14 @@ export default function BotDetailPage() {
         </div>
 
         {/* Bot header card */}
-        <div className="section-card rounded-2xl p-6 sm:p-8 animate-fade-in-up delay-100">
+        <div className="section-card dark:bg-zinc-900/50 rounded-2xl p-6 sm:p-8 animate-fade-in-up delay-100 border border-indigo-50/40 dark:border-white/5">
           <div className="flex flex-col sm:flex-row items-start gap-6">
             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 flex items-center justify-center text-5xl leading-none shrink-0 shadow-md shadow-indigo-100/50">
               {bot.icon}
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">{bot.label}</h1>
-              <p className="text-sm sm:text-base text-gray-500 mt-2 leading-relaxed">
+              <h1 className="text-2xl sm:text-3xl font-black text-black dark:text-white tracking-tight leading-tight">{bot.label}</h1>
+              <p className="text-sm sm:text-base text-gray-700 dark:text-gray-400 mt-2 leading-relaxed font-medium">
                 {bot.description}
               </p>
               <div className="mt-6 flex flex-col gap-3">
@@ -146,13 +146,13 @@ export default function BotDetailPage() {
         </div>
 
         {/* Tabs — full width on mobile */}
-        <div className="flex bg-gray-100/80 backdrop-blur rounded-2xl p-1.5 shadow-sm animate-fade-in-up delay-100">
+        <div className="flex bg-gray-100/80 dark:bg-zinc-900/80 backdrop-blur rounded-2xl p-1.5 shadow-sm animate-fade-in-up delay-100 border border-transparent dark:border-white/10">
           <button
             onClick={() => setTab("learn")}
             className={`flex-1 py-3 text-xs font-bold rounded-xl transition-all duration-300 uppercase tracking-widest ${
               tab === "learn"
-                ? "bg-white text-indigo-700 shadow-md shadow-indigo-100/50 scale-[1.02]"
-                : "text-gray-500 hover:text-gray-700"
+                ? "bg-white text-indigo-700 shadow-md shadow-indigo-100/50 dark:shadow-none scale-[1.02]"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
             }`}
           >
             📖 Step-By-Step Guide
@@ -161,8 +161,8 @@ export default function BotDetailPage() {
             onClick={() => setTab("debug")}
             className={`flex-1 py-3 text-xs font-bold rounded-xl transition-all duration-300 uppercase tracking-widest ${
               tab === "debug"
-                ? "bg-white text-indigo-700 shadow-md shadow-indigo-100/50 scale-[1.02]"
-                : "text-gray-500 hover:text-gray-700"
+                ? "bg-white text-indigo-700 shadow-md shadow-indigo-100/50 dark:shadow-none scale-[1.02]"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
             }`}
           >
             🐛 Troubleshooting
@@ -186,8 +186,8 @@ export default function BotDetailPage() {
         {/* Debug tab */}
         {tab === "debug" && (
           <div className="flex flex-col gap-5">
-            <section className="section-card rounded-2xl p-5 sm:p-6 shadow-md shadow-indigo-50 animate-scale-up">
-              <p className="text-sm font-bold text-gray-900 mb-4">
+            <section className="section-card dark:bg-zinc-900/50 rounded-2xl p-5 sm:p-6 shadow-md shadow-indigo-50 dark:shadow-none animate-scale-up border border-indigo-50/40 dark:border-white/5">
+              <p className="text-sm font-black text-black dark:text-white mb-4 uppercase tracking-tight">
                 What&apos;s currently failing?
               </p>
               <div className="flex flex-wrap gap-2 mb-5">
