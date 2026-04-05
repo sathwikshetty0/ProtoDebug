@@ -6,10 +6,10 @@ import type { Problem } from "@/lib/data";
 export function ProblemCard({ problem }: { problem: Problem }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="section-card rounded-2xl overflow-hidden animate-scale-up">
+    <div className="section-card dark:bg-zinc-900/50 rounded-2xl overflow-hidden animate-scale-up border border-indigo-50/40 dark:border-white/5">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-start justify-between px-5 sm:px-6 py-5 text-left hover:bg-gray-50/80 active:bg-gray-100/60 transition-colors duration-200 gap-3"
+        className="w-full flex items-start justify-between px-5 sm:px-6 py-5 text-left hover:bg-gray-50/80 dark:hover:bg-white/5 active:bg-gray-100/60 dark:active:bg-white/10 transition-colors duration-200 gap-3"
       >
         <div className="flex items-start gap-3.5 min-w-0">
           <span
@@ -18,11 +18,11 @@ export function ProblemCard({ problem }: { problem: Problem }) {
             }`}
           />
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-900 leading-snug">
+            <p className="text-sm font-black text-black dark:text-white leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
               {problem.title}
             </p>
             {!open && (
-              <p className="text-xs text-gray-500 mt-1.5 line-clamp-2 leading-relaxed">
+              <p className="text-xs text-gray-700 dark:text-gray-400 mt-1.5 line-clamp-2 leading-relaxed">
                 {problem.description}
               </p>
             )}
@@ -35,7 +35,7 @@ export function ProblemCard({ problem }: { problem: Problem }) {
 
       {open && (
         <div className="border-t border-gray-100 px-5 sm:px-6 py-6 flex flex-col gap-6 animate-fade-in">
-          <p className="text-sm text-gray-600 leading-relaxed">{problem.description}</p>
+          <p className="text-sm text-gray-800 dark:text-gray-300 leading-relaxed font-medium">{problem.description}</p>
 
           <div>
             <p className="section-label mb-3">
@@ -47,7 +47,7 @@ export function ProblemCard({ problem }: { problem: Problem }) {
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-indigo-100 to-indigo-50 text-indigo-600 text-[10px] font-bold shrink-0 mt-0.5 shadow-sm">
                     {i + 1}
                   </span>
-                  <span className="text-sm text-gray-700 leading-relaxed">{step}</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{step}</span>
                 </li>
               ))}
             </ol>
@@ -92,7 +92,7 @@ export function ResultsList({
 }) {
   return (
     <section className="flex flex-col gap-3">
-      <p className="text-xs text-gray-400 font-semibold px-1">
+      <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold px-1 uppercase tracking-wider">
         {results.length === 0
           ? "No matches"
           : `${results.length} result${results.length !== 1 ? "s" : ""} for ${label}`}
