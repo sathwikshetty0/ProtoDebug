@@ -1,6 +1,41 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Header from "@/app/components/header";
 import { BOTS } from "@/lib/data";
+
+interface BotProgress {
+  id: string;
+  label: string;
+  icon: string;
+  percent: number;
+}
+
+function ResumeCard({ bot }: { bot: BotProgress }) {
+  return (
+    <Link 
+      href={`/bots/${bot.id}`}
+      className="flex flex-col gap-4 p-6 rounded-[2rem] bg-white dark:bg-gray-800 border border-indigo-100/50 dark:border-indigo-900/40 shadow-sm hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-none hover:-translate-y-1 transition-all duration-500 group"
+    >
+      <div className="flex items-center justify-between">
+        <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-500">
+          {bot.icon}
+        </div>
+        <div className="flex flex-col items-end">
+          <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{bot.percent}%</span>
+          <div className="w-16 h-1 bg-gray-100 dark:bg-gray-700 rounded-full mt-1 overflow-hidden">
+            <div className="h-full bg-indigo-500" style={{ width: `${bot.percent}%` }} />
+          </div>
+        </div>
+      </div>
+      <div>
+        <p className="text-sm font-black text-gray-900 dark:text-white uppercase italic">{bot.label}</p>
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">In Progress</p>
+      </div>
+    </Link>
+  );
+}
 
 function DomainCard({
   href,
@@ -44,11 +79,38 @@ function DomainCard({
 }
 
 export default function LandingPage() {
+  const [progress, setProgress] = useState<BotProgress[]>([]);
+
+  useEffect(() => {
+    const active = BOTS.map((bot) => {
+      const saved = localStorage.getItem(`progress-${bot.id}`);
+      if (saved) {
+        const completed = JSON.parse(saved) as number[];
+        const percent = Math.round((completed.length / bot.learnSections.length) * 100);
+        return { id: bot.id, label: bot.label, icon: bot.icon, percent };
+      }
+      return null;
+    }).filter(Boolean) as BotProgress[];
+    setProgress(active);
+  }, []);
+
   return (
     <div className="min-h-screen page-gradient selection:bg-indigo-600 selection:text-white">
       <Header />
 
       <main className="max-w-7xl mx-auto px-8 lg:px-12 py-8 sm:py-12 flex flex-col gap-12 sm:gap-20">
+        {/* Progress Command Center */}
+        {progress.length > 0 && (
+          <div className="flex flex-col gap-8 animate-fade-in-up">
+            <p className="section-label px-2">Active Intelligence Channels</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {progress.map((bot) => (
+                <ResumeCard key={bot.id} bot={bot} />
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Hero */}
         <div className="flex flex-col gap-6 animate-fade-in-up items-start text-left max-w-4xl pt-4">
           <div className="flex flex-col gap-5">
