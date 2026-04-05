@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import CommandPalette from "@/app/components/command-palette";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,30 +28,33 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen flex flex-col bg-gray-50/50">
+      <body className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
+        <CommandPalette />
         <div className="flex-grow">{children}</div>
-        <footer className="w-full border-t border-indigo-100/40 bg-white/40 backdrop-blur-md py-10">
-          <div className="mx-auto max-w-6xl px-8 flex flex-col gap-8 md:flex-row items-center justify-between">
-            <div className="flex flex-col gap-2 items-center md:items-start text-center md:text-left">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-100 ring-2 ring-white/10">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M8 1.5L9.7 5.5L14 5.8L11 8.5L12 13L8 10.7L4 13L5 8.5L2 5.8L6.3 5.5L8 1.5Z"
-                      fill="white"
-                    />
-                  </svg>
+        
+        <footer className="w-full border-t border-card-border bg-card-bg py-12">
+          <div className="mx-auto max-w-7xl px-8 sm:px-12 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="flex flex-col gap-3 items-center md:items-start text-center md:text-left">
+              <div className="flex items-center gap-3 group">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-100 dark:shadow-none group-hover:scale-110 transition-transform duration-500">
+                   <span className="text-xl">🔍</span>
                 </div>
-                <span className="text-[17px] font-black text-gray-900 tracking-tight">
+                <span className="text-xl font-black text-gray-900 dark:text-white tracking-tighter uppercase italic">
                   ProtoDebug
                 </span>
               </div>
-              <p className="text-xs text-gray-400 font-bold tracking-tight uppercase">AI-Powered Debugging System</p>
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-relaxed max-w-xs">
+                Precision diagnostics for innovators. Accelerating the future, one byte at a time.
+              </p>
             </div>
 
             <div className="flex flex-col gap-2 items-center md:items-end text-center md:text-right">
-              <p className="text-xs font-black text-gray-500 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100/50 shadow-sm">&copy; {new Date().getFullYear()} sathwik shetty</p>
-              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Manglore , India</p>
+              <p className="text-[11px] font-black text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/40 px-4 py-1.5 rounded-full border border-indigo-100 dark:border-indigo-800 shadow-sm">&copy; {new Date().getFullYear()} sathwik shetty</p>
+              <div className="flex items-center gap-4 text-[9px] font-bold text-gray-400 uppercase tracking-[0.2em]">
+                <span>MANGLORE</span>
+                <span className="w-1 h-1 bg-gray-300 dark:bg-gray-700 rounded-full"></span>
+                <span>INDIA</span>
+              </div>
             </div>
           </div>
         </footer>
