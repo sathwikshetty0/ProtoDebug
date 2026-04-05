@@ -11,7 +11,7 @@ function StepLabel({ n, text }: { n: number; text: string }) {
       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 text-white text-xs font-black shrink-0 shadow-sm shadow-indigo-200">
         {n}
       </span>
-      <p className="text-sm font-black text-gray-900 uppercase tracking-tight">{text}</p>
+      <p className="text-sm font-black text-black dark:text-white uppercase tracking-tight">{text}</p>
     </div>
   );
 }
@@ -55,14 +55,14 @@ export default function WebPage() {
       <main className="max-w-7xl mx-auto px-8 sm:px-12 py-8 flex flex-col gap-8">
 
         <div className="animate-fade-in-up flex flex-col gap-2">
-          <h1 className="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight leading-none uppercase italic">Web Application Lab</h1>
-          <p className="text-sm sm:text-base text-gray-500 font-medium leading-relaxed max-w-2xl opacity-70">
+          <h1 className="text-2xl sm:text-4xl font-black text-black dark:text-white tracking-tight leading-none uppercase italic">Web Application Lab</h1>
+          <p className="text-sm sm:text-base text-gray-700 dark:text-gray-400 font-medium leading-relaxed max-w-2xl opacity-70">
             Choose your stack and describe the stack-overflow-level bugs you're witnessing.
           </p>
         </div>
 
         {/* Step 1: Domain */}
-        <section className="section-card rounded-[2.5rem] p-8 sm:p-10 animate-fade-in-up delay-100 border border-indigo-50/40">
+        <section className="section-card dark:bg-zinc-900/50 rounded-[2.5rem] p-8 sm:p-10 animate-fade-in-up delay-100 border border-indigo-50/40 dark:border-white/5">
           <StepLabel n={1} text="Choose technology stack" />
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-8">
             {WEB_DOMAINS.map((d) => (
@@ -71,8 +71,8 @@ export default function WebPage() {
                 onClick={() => pickDomain(d)}
                 className={`flex flex-col items-center gap-3 px-6 py-8 rounded-[2rem] border text-center transition-all duration-300 touch-manipulation group ${
                   selectedDomain?.id === d.id
-                    ? "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-lg shadow-indigo-100 scale-[1.03]"
-                    : "border-gray-100 bg-gray-50/30 text-gray-700 hover:border-indigo-300 hover:bg-white active:scale-95 hover:shadow-xs"
+                    ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 shadow-lg shadow-indigo-100 dark:shadow-none scale-[1.03]"
+                    : "border-gray-100 dark:border-white/5 bg-gray-50/30 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-white dark:hover:bg-zinc-900 active:scale-95 hover:shadow-xs"
                 }`}
               >
                 <span className="text-4xl leading-none transition-transform group-hover:scale-110">{d.icon}</span>
