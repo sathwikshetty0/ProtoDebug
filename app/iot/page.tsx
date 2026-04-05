@@ -20,7 +20,7 @@ function StepLabel({ n, text }: { n: number; text: string }) {
       <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-700 text-white text-xs font-black shrink-0 shadow-sm shadow-indigo-200">
         {n}
       </span>
-      <p className="text-sm font-black text-gray-900 uppercase tracking-tight">{text}</p>
+      <p className="text-sm font-black text-black dark:text-white uppercase tracking-tight">{text}</p>
     </div>
   );
 }
@@ -77,14 +77,14 @@ export default function IotPage() {
       <main className="max-w-7xl mx-auto px-8 sm:px-12 py-8 flex flex-col gap-8">
 
         <div className="animate-fade-in-up flex flex-col gap-2">
-          <h1 className="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight leading-none uppercase italic">Hardware Lab</h1>
-          <p className="text-sm sm:text-base text-gray-500 font-medium leading-relaxed max-w-2xl opacity-70">
+          <h1 className="text-2xl sm:text-4xl font-black text-black dark:text-white tracking-tight leading-none uppercase italic">Hardware Lab</h1>
+          <p className="text-sm sm:text-base text-gray-700 dark:text-gray-400 font-medium leading-relaxed max-w-2xl opacity-70">
             Pick your MCU, add components, then describe the issue to pinpoint the solution.
           </p>
         </div>
 
         {/* Step 1: MCU */}
-        <section className="section-card rounded-[2.5rem] p-8 sm:p-10 animate-fade-in-up delay-100 border border-indigo-50/40">
+        <section className="section-card dark:bg-zinc-900/50 rounded-[2.5rem] p-8 sm:p-10 animate-fade-in-up delay-100 border border-indigo-50/40 dark:border-white/5">
           <StepLabel n={1} text="Choose your microcontroller" />
           <div className="flex flex-col gap-6 mt-8">
             {MCU_GROUPS.map((group) => (
@@ -99,8 +99,8 @@ export default function IotPage() {
                       onClick={() => pickMcu(m)}
                       className={`flex flex-col items-center gap-2 p-4 rounded-2xl border text-center transition-all duration-300 touch-manipulation group ${
                         selectedMcu?.id === m.id
-                          ? "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-lg shadow-indigo-100 scale-[1.03]"
-                          : "border-gray-100 bg-gray-50/30 text-gray-700 hover:border-indigo-300 hover:bg-white active:scale-95 hover:shadow-xs"
+                          ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 shadow-lg shadow-indigo-100 dark:shadow-none scale-[1.03]"
+                          : "border-gray-100 dark:border-white/5 bg-gray-50/30 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-white dark:hover:bg-zinc-900 active:scale-95 hover:shadow-xs"
                       }`}
                     >
                       <span className="text-2xl leading-none transition-transform group-hover:scale-110">{m.icon}</span>
@@ -116,7 +116,7 @@ export default function IotPage() {
 
         {/* Step 2: Components */}
         {selectedMcu && (
-          <section className="section-card rounded-[2.5rem] p-8 sm:p-10 animate-scale-up border border-emerald-50/40">
+          <section className="section-card dark:bg-zinc-900/50 rounded-[2.5rem] p-8 sm:p-10 animate-scale-up border border-emerald-50/40 dark:border-white/5">
             <div className="flex items-center justify-between mb-8">
               <StepLabel n={2} text="Add sensors & modules" />
               <span className="text-[10px] text-gray-500 font-black bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-100">Multi-Select Enabled</span>
@@ -152,8 +152,8 @@ export default function IotPage() {
                         title={`${comp.description} · ${comp.interface} · ${comp.voltage}`}
                         className={`flex flex-col items-center gap-2 px-2 py-5 rounded-2xl border text-center transition-all duration-300 touch-manipulation group ${
                           selectedComponents.has(comp.id)
-                            ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-lg shadow-emerald-100 scale-[1.03]"
-                            : "border-gray-100 bg-gray-50/30 text-gray-700 hover:border-emerald-300 hover:bg-white active:scale-95 hover:shadow-xs"
+                            ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 shadow-lg shadow-emerald-100 dark:shadow-none scale-[1.03]"
+                            : "border-gray-100 dark:border-white/5 bg-gray-50/30 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:border-emerald-300 dark:hover:border-emerald-500/50 hover:bg-white dark:hover:bg-zinc-900 active:scale-95 hover:shadow-xs"
                         }`}
                       >
                         <span className="text-2xl leading-none transition-transform group-hover:scale-110">{comp.icon}</span>
@@ -169,7 +169,7 @@ export default function IotPage() {
 
         {/* Step 3: Search */}
         {selectedMcu && (
-          <section className="section-card rounded-[2.5rem] p-8 sm:p-10 animate-scale-up border border-indigo-50/40">
+          <section className="section-card dark:bg-zinc-900/50 rounded-[2.5rem] p-8 sm:p-10 animate-scale-up border border-indigo-50/40 dark:border-white/5">
             <StepLabel
               n={3}
               text={
