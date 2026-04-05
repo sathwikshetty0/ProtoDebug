@@ -11,6 +11,7 @@ import {
 } from "@/lib/data";
 import Header from "@/app/components/header";
 import { ResultsList } from "@/app/components/problem-card";
+import AiAssistant from "@/app/components/ai-assistant";
 
 const MCU_GROUPS = Array.from(new Set(MICROCONTROLLERS.map((m) => m.group)));
 
@@ -31,6 +32,7 @@ export default function IotPage() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Problem[]>([]);
   const [searched, setSearched] = useState(false);
+  const [isAiActive, setIsAiActive] = useState(false);
 
   const selectedCompObjects = COMPONENT_CATEGORIES.flatMap((c) =>
     c.components.filter((co) => selectedComponents.has(co.id))
@@ -71,6 +73,8 @@ export default function IotPage() {
     setSearched(true);
   }
 
+  const contextStr = selectedMcu ? `${selectedMcu.label} ${selectedCompObjects.length > 0 ? "+ " + selectedCompObjects.map(c => c.label).join(", ") : ""}` : "General Hardware";
+
   return (
     <div className="min-h-screen page-gradient">
       <Header />
@@ -81,6 +85,29 @@ export default function IotPage() {
           <p className="text-sm sm:text-base text-gray-500 font-medium leading-relaxed max-w-2xl opacity-70">
             Pick your MCU, add components, then describe the issue to pinpoint the solution.
           </p>
+        </div>
+
+        {/* AI FAB Toggle */}
+        <div className="fixed bottom-10 right-10 z-50 flex flex-col items-end gap-6">
+          {isAiActive && (
+            <div className="animate-scale-up origin-bottom-right">
+              <AiAssistant 
+                context={contextStr} 
+                initialIssue={query}
+                onClose={() => setIsAiActive(false)}
+              />
+            </div>
+          )}
+          <button 
+            onClick={() => setIsAiActive(!isAiActive)}
+            className={`w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl transition-all duration-500 hover:scale-110 active:scale-95 ${
+              isAiActive 
+                ? "bg-white text-gray-800 rotate-90" 
+                : "bg-indigo-600 text-white hover:rotate-12"
+            }`}
+          >
+            {isAiActive ? "×" : "🧠"}
+          </button>
         </div>
 
         {/* Step 1: MCU */}
@@ -283,14 +310,35 @@ export default function IotPage() {
 
         {/* Results */}
         {searched && selectedMcu && (
-          <ResultsList
-            results={results}
-            label={
-              selectedCompObjects.length > 0
-                ? `${selectedMcu.label} + ${selectedCompObjects.map((c) => c.label).join(" + ")}`
-                : selectedMcu.label
-            }
-          />
+          <div className="flex flex-col gap-6">
+            <ResultsList
+              results={results}
+              label={
+                selectedCompObjects.length > 0
+                  ? `${selectedMcu.label} + ${selectedCompObjects.map((c) => c.label).join(" + ")}`
+                  : selectedMcu.label
+              }
+            />
+
+            {/* AI Call to Action */}
+            <div className="section-card rounded-[2.5rem] p-10 flex flex-col sm:flex-row items-center justify-between gap-8 animate-fade-in-up border border-indigo-100 bg-gradient-to-br from-indigo-50/30 to-white">
+              <div className="flex flex-col gap-3 text-center sm:text-left">
+                <p className="text-xl font-black text-gray-900 leading-tight">Couldn&apos;t find exactly what you need?</p>
+                <p className="text-sm text-gray-500 font-medium leading-relaxed max-w-sm">
+                  Let our AI Brain analyze your specific hardware stack and provide a custom diagnostics report.
+                </p>
+              </div>
+              <button 
+                onClick={() => setIsAiActive(true)}
+                className="btn-primary !px-10 !py-5 uppercase tracking-widest text-[11px] font-black shrink-0 flex items-center gap-2 group shadow-xl shadow-indigo-100"
+              >
+                🧠 Ask AI Debugger
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </button>
+            </div>
+          </div>
         )}
         
         <div className="h-6" />
