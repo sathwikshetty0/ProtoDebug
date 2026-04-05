@@ -6,6 +6,7 @@ import Link from "next/link";
 import { BOTS, searchBotProblems, type LearnSection } from "@/lib/data";
 import Header from "@/app/components/header";
 import { ResultsList } from "@/app/components/problem-card";
+import AiAssistant from "@/app/components/ai-assistant";
 
 type Tab = "learn" | "debug";
 
@@ -70,6 +71,7 @@ export default function BotDetailPage() {
     bot ? searchBotProblems(bot, "") : []
   );
   const [searched, setSearched] = useState(true);
+  const [isAiActive, setIsAiActive] = useState(false);
 
   if (!bot) {
     return (
@@ -101,6 +103,8 @@ export default function BotDetailPage() {
     setTab("debug");
   }
 
+  const contextStr = `Robotics Suite - ${bot.label}. Hardware: ${bot.hardware.join(", ")}`;
+
   return (
     <div className="min-h-screen page-gradient">
       <Header />
@@ -113,6 +117,29 @@ export default function BotDetailPage() {
           </Link>
           <span className="text-gray-300">/</span>
           <span className="text-gray-600 font-bold whitespace-nowrap">{bot.label}</span>
+        </div>
+
+        {/* AI FAB Toggle */}
+        <div className="fixed bottom-10 right-10 z-50 flex flex-col items-end gap-6">
+          {isAiActive && (
+            <div className="animate-scale-up origin-bottom-right">
+              <AiAssistant 
+                context={contextStr} 
+                initialIssue={query}
+                onClose={() => setIsAiActive(false)}
+              />
+            </div>
+          )}
+          <button 
+            onClick={() => setIsAiActive(!isAiActive)}
+            className={`w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl transition-all duration-500 hover:scale-110 active:scale-95 ${
+              isAiActive 
+                ? "bg-white text-gray-800 rotate-90" 
+                : "bg-indigo-600 text-white hover:rotate-12"
+            }`}
+          >
+            {isAiActive ? "×" : "🧠"}
+          </button>
         </div>
 
         {/* Bot header card */}
@@ -213,7 +240,27 @@ export default function BotDetailPage() {
               </form>
             </section>
 
-            {searched && <ResultsList results={results} label={bot.label} />}
+            {searched && (
+              <div className="flex flex-col gap-6">
+                <ResultsList results={results} label={bot.label} />
+                
+                {/* AI Call to Action */}
+                <div className="section-card rounded-2xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6 animate-fade-in-up border border-indigo-100 bg-gradient-to-br from-indigo-50/30 to-white">
+                  <div className="flex flex-col gap-2 text-center sm:text-left">
+                    <p className="text-lg font-black text-gray-900 leading-tight">Advanced Troubleshooting Needed?</p>
+                    <p className="text-sm text-gray-500 font-medium">
+                      Discuss complex {bot.label} issues with our AI brain.
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => setIsAiActive(true)}
+                    className="btn-primary !px-8 !py-4 uppercase tracking-widest text-[10px] font-black shrink-0 flex items-center gap-2 group shadow-lg shadow-indigo-100"
+                  >
+                    🧠 Ask AI Debugger
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
