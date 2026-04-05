@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "./components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,35 +26,43 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen flex flex-col bg-gray-50/50">
-        <div className="flex-grow">{children}</div>
-        <footer className="w-full border-t border-indigo-100/40 bg-white/40 backdrop-blur-md py-10">
-          <div className="mx-auto max-w-6xl px-8 flex flex-col gap-8 md:flex-row items-center justify-between">
-            <div className="flex flex-col gap-2 items-center md:items-start text-center md:text-left">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-100 ring-2 ring-white/10">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path
-                      d="M8 1.5L9.7 5.5L14 5.8L11 8.5L12 13L8 10.7L4 13L5 8.5L2 5.8L6.3 5.5L8 1.5Z"
-                      fill="white"
-                    />
-                  </svg>
+      <body className="min-h-screen flex flex-col bg-gray-50/50 dark:bg-zinc-950 transition-colors duration-300">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex-grow">{children}</div>
+          <footer className="w-full border-t border-indigo-100/40 dark:border-white/10 bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md py-10 transition-colors duration-300">
+            <div className="mx-auto max-w-6xl px-8 flex flex-col gap-8 md:flex-row items-center justify-between">
+              <div className="flex flex-col gap-2 items-center md:items-start text-center md:text-left">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-lg shadow-indigo-100 dark:shadow-none ring-2 ring-white/10">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M8 1.5L9.7 5.5L14 5.8L11 8.5L12 13L8 10.7L4 13L5 8.5L2 5.8L6.3 5.5L8 1.5Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </div>
+                  <span className="text-[17px] font-black text-gray-900 dark:text-gray-100 tracking-tight">
+                    ProtoDebug
+                  </span>
                 </div>
-                <span className="text-[17px] font-black text-gray-900 tracking-tight">
-                  ProtoDebug
-                </span>
+                <p className="text-xs text-gray-400 font-bold tracking-tight uppercase">AI-Powered Debugging System</p>
               </div>
-              <p className="text-xs text-gray-400 font-bold tracking-tight uppercase">AI-Powered Debugging System</p>
-            </div>
 
-            <div className="flex flex-col gap-2 items-center md:items-end text-center md:text-right">
-              <p className="text-xs font-black text-gray-500 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100/50 shadow-sm">&copy; {new Date().getFullYear()} sathwik shetty</p>
-              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Manglore , India</p>
+              <div className="flex flex-col gap-2 items-center md:items-end text-center md:text-right">
+                <p className="text-xs font-black text-gray-500 dark:text-gray-400 bg-indigo-50 dark:bg-white/5 px-3 py-1 rounded-full border border-indigo-100/50 dark:border-white/10 shadow-sm">&copy; {new Date().getFullYear()} sathwik shetty</p>
+                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest">Manglore , India</p>
+              </div>
             </div>
-          </div>
-        </footer>
+          </footer>
+        </ThemeProvider>
       </body>
     </html>
   );
