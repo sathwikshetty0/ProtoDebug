@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Problem } from "@/lib/data";
+import CodeBlock from "@/app/components/code-block";
 
 export function ProblemCard({ problem }: { problem: Problem }) {
   const [open, setOpen] = useState(false);
@@ -54,17 +55,10 @@ export function ProblemCard({ problem }: { problem: Problem }) {
           </div>
 
           {problem.code && (
-            <div className="rounded-xl overflow-hidden border border-gray-200/80 shadow-sm">
-              <div className="code-block-header">
-                <span className="text-[11px] text-gray-400 font-mono font-medium">
-                  {problem.code.lang}
-                </span>
-                <span className="text-[10px] text-gray-500 font-medium">example</span>
-              </div>
-              <pre className="code-block-body">
-                {problem.code.snippet}
-              </pre>
-            </div>
+            <CodeBlock 
+              code={problem.code.snippet} 
+              lang={problem.code.lang} 
+            />
           )}
 
           <div className="flex flex-wrap gap-1.5 pt-1">
