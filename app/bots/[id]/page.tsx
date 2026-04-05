@@ -7,6 +7,7 @@ import { BOTS, searchBotProblems, type LearnSection } from "@/lib/data";
 import Header from "@/app/components/header";
 import { ResultsList } from "@/app/components/problem-card";
 import AiAssistant from "@/app/components/ai-assistant";
+import CodeBlock from "@/app/components/code-block";
 
 type Tab = "learn" | "debug";
 
@@ -74,17 +75,10 @@ function LearnCard({
             )}
           </div>
           {section.code && (
-            <div className="rounded-xl overflow-hidden border border-gray-200/80 shadow-sm">
-              <div className="code-block-header">
-                <span className="text-[11px] text-gray-400 font-mono font-medium">
-                  {section.code.lang}
-                </span>
-                <span className="text-[10px] text-gray-500 font-medium">example</span>
-              </div>
-              <pre className="code-block-body">
-                {section.code.snippet}
-              </pre>
-            </div>
+            <CodeBlock 
+              code={section.code.snippet} 
+              lang={section.code.lang} 
+            />
           )}
           {!isCompleted && (
              <button 
