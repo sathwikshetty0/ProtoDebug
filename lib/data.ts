@@ -45,6 +45,128 @@ export interface WebDomain {
   quickFills: string[];
 }
 
+export interface DiagnosticNode {
+  id: string;
+  question: string;
+  options: {
+    label: string;
+    nextId?: string;
+    result?: {
+      title: string;
+      fix: string;
+      code?: { lang: string; snippet: string };
+    };
+  }[];
+}
+
+export interface DiagnosticTree {
+  id: string;
+  label: string;
+  icon: string;
+  startNodeId: string;
+  nodes: DiagnosticNode[];
+}
+
+export const DIAGNOSTIC_TREES: DiagnosticTree[] = [
+  {
+    id: "iot_power",
+    label: "Power & Connection",
+    icon: "🔌",
+    startNodeId: "power_check",
+    nodes: [
+      {
+        id: "power_check",
+        question: "Is the onboard Power LED (usually red or blue) currently lit?",
+        options: [
+          { label: "Yes, it's solid", nextId: "serial_check" },
+          { label: "No, it's completely off", nextId: "no_power" },
+          { label: "It's blinking rapidly", nextId: "brownout" },
+        ],
+      },
+      {
+        id: "serial_check",
+        question: "When you plug it into your PC, does a new COM/Serial port appear?",
+        options: [
+          { label: "Yes, I see the port", nextId: "upload_check" },
+          { label: "No port appears", nextId: "no_port" },
+        ],
+      },
+      {
+        id: "no_power",
+        question: "Check your cable. Is it a data cable or just a charging cable?",
+        options: [
+          { 
+            label: "It's a verified data cable", 
+            result: { 
+              title: "Fuse or Regulator Failure", 
+              fix: "Your board's voltage regulator or polyfuse might be blown. Try powering via the 5V/VIN pin directly with a regulated 5V source. If it still doesn't light up, the high-side MOSFET is likely dead."
+            } 
+          },
+          { 
+            label: "Actually, it's a cheap charging cable", 
+            result: { 
+              title: "Cable Restriction", 
+              fix: "Many cheap micro-USB cables lack the D+/D- data lines. Swap for a high-quality braided data cable to enable both power and serial communication."
+            } 
+          },
+        ],
+      },
+      {
+        id: "brownout",
+        question: "Are you powering any motors or high-current LEDs from the board?",
+        options: [
+          { 
+            label: "Yes, a few servos/LEDs", 
+            result: { 
+              title: "Brownout Detected", 
+              fix: "The onboard regulator can only handle ~500mA. Your components are pulling the voltage down, causing a reboot loop.",
+              code: { lang: "cpp", snippet: "// Solution: Use an external power source\n// Common Ground is REQUIRED\n// LiPo -> DC Converter -> VIN" }
+            } 
+          },
+          { label: "No, just the board", nextId: "bad_regulator" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "web_cors",
+    label: "API / CORS Issues",
+    icon: "🌐",
+    startNodeId: "cors_check",
+    nodes: [
+      {
+        id: "cors_check",
+        question: "Does the error console say 'Blocked by CORS policy'?",
+        options: [
+          { label: "Yes, exactly that", nextId: "backend_check" },
+          { label: "No, it's a 404 or 500", nextId: "route_check" },
+        ],
+      },
+      {
+        id: "backend_check",
+        question: "Do you have access to the backend code?",
+        options: [
+          { 
+            label: "Yes, I'm the dev", 
+            result: { 
+              title: "Header Configuration", 
+              fix: "Add the 'Access-Control-Allow-Origin' header to your response. For development, you can use '*'.",
+              code: { lang: "javascript", snippet: "res.setHeader('Access-Control-Allow-Origin', '*');" }
+            } 
+          },
+          { 
+            label: "No, it's a public API", 
+            result: { 
+              title: "Proxy Required", 
+              fix: "Public APIs often restrict browser access. You need to route your request through a backend proxy or use a service like 'cors-anywhere'."
+            } 
+          },
+        ],
+      },
+    ],
+  },
+];
+
 export interface LearnSection {
   title: string;
   body: string;

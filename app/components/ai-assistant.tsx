@@ -94,16 +94,16 @@ export default function AiAssistant({
   }
 
   return (
-    <div className="flex flex-col h-[500px] sm:h-[600px] w-full max-w-2xl bg-white rounded-[2rem] shadow-2xl border border-indigo-100 overflow-hidden animate-scale-up">
+    <div className="flex flex-col h-[500px] sm:h-[600px] w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-indigo-100 overflow-hidden animate-scale-up">
       {/* Header */}
-      <div className="px-6 py-4 bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-between">
+      <div className="px-5 py-3 sm:px-6 sm:py-4 bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
             🤖
           </div>
           <div>
-            <h3 className="text-sm font-black text-white uppercase tracking-wider">AI Debugger</h3>
-            <p className="text-[10px] text-indigo-100 font-bold uppercase tracking-widest opacity-80">Intelligence Active</p>
+            <h3 className="text-sm font-semibold text-white">AI Debugger</h3>
+            <p className="text-xs text-indigo-100 font-medium opacity-80">Intelligence Active</p>
           </div>
         </div>
         {onClose && (
@@ -121,9 +121,9 @@ export default function AiAssistant({
         className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-gray-50/50"
       >
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center gap-4 opacity-40">
-            <span className="text-5xl">🧠</span>
-            <p className="text-xs font-black text-gray-500 uppercase tracking-widest">
+          <div className="flex flex-col items-center justify-center h-full text-center gap-3 opacity-50">
+            <span className="text-4xl">🧠</span>
+            <p className="text-sm font-medium text-gray-500">
               Ready to analyze {context}
             </p>
           </div>
@@ -164,7 +164,7 @@ export default function AiAssistant({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Describe your issue..."
-          className="flex-1 input-polished !py-3 !px-5 text-sm font-bold"
+          className="flex-1 input-polished !py-2.5 !px-4 text-sm"
           disabled={isLoading}
         />
         <button 

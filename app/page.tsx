@@ -16,22 +16,22 @@ function ResumeCard({ bot }: { bot: BotProgress }) {
   return (
     <Link 
       href={`/bots/${bot.id}`}
-      className="flex flex-col gap-4 p-6 rounded-[2rem] bg-white dark:bg-gray-800 border border-indigo-100/50 dark:border-indigo-900/40 shadow-sm hover:shadow-xl hover:shadow-indigo-100/50 dark:hover:shadow-none hover:-translate-y-1 transition-all duration-500 group"
+      className="flex flex-col gap-4 p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group"
     >
       <div className="flex items-center justify-between">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-500">
+        <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform duration-300">
           {bot.icon}
         </div>
         <div className="flex flex-col items-end">
-          <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{bot.percent}%</span>
-          <div className="w-16 h-1 bg-gray-100 dark:bg-gray-700 rounded-full mt-1 overflow-hidden">
+          <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{bot.percent}%</span>
+          <div className="w-16 h-1 bg-gray-100 dark:bg-gray-700 rounded-full mt-1.5 overflow-hidden">
             <div className="h-full bg-indigo-500" style={{ width: `${bot.percent}%` }} />
           </div>
         </div>
       </div>
       <div>
-        <p className="text-sm font-black text-gray-900 dark:text-white uppercase italic">{bot.label}</p>
-        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">In Progress</p>
+        <p className="text-sm font-semibold text-gray-900 dark:text-white">{bot.label}</p>
+        <p className="text-xs text-gray-500 mt-0.5">In Progress</p>
       </div>
     </Link>
   );
@@ -53,23 +53,23 @@ function DomainCard({
   return (
     <Link
       href={href}
-      className={`card-elevated flex flex-col gap-6 p-8 rounded-[2.5rem] group animate-fade-in-up border border-indigo-50/50 dark:border-indigo-900/40 hover:border-indigo-200/60 dark:hover:border-indigo-800 transition-all duration-500 ${delay ?? ""}`}
+      className={`card-elevated flex flex-col gap-4 p-6 sm:p-8 rounded-2xl group animate-fade-in-up border border-gray-100 dark:border-gray-800 hover:border-indigo-100 dark:hover:border-indigo-800 transition-all duration-300 ${delay ?? ""}`}
     >
-      <div className="w-16 h-16 rounded-3xl bg-indigo-50/50 dark:bg-indigo-900/20 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-500 ease-out shadow-sm border border-indigo-100/20 dark:border-indigo-800/40">
+      <div className="w-14 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform duration-300 shadow-sm border border-gray-100 dark:border-gray-700">
         {icon}
       </div>
-      <div className="flex-1">
-        <p className="text-xl font-black text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300 uppercase italic">
+      <div className="flex-1 mt-2">
+        <p className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200">
           {title}
         </p>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed font-medium">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
           {subtitle}
         </p>
       </div>
-      <div className="flex items-center gap-2 group/btn">
-        <span className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 flex items-center gap-2 group-hover:translate-x-1 transition-transform duration-300 tracking-[0.2em] uppercase">
-          Launch Intelligence
-          <svg className="w-3.5 h-3.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+      <div className="flex items-center gap-1.5 group/btn mt-2">
+        <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform duration-300">
+          Open Lab
+          <svg className="w-4 h-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </span>
@@ -113,24 +113,24 @@ export default function LandingPage() {
 
         {/* Hero */}
         <div className="flex flex-col gap-6 animate-fade-in-up items-start text-left max-w-4xl pt-4">
-          <div className="flex flex-col gap-5">
-            <h1 className="text-6xl sm:text-8xl lg:text-9xl font-black text-gray-900 dark:text-white tracking-tighter leading-[0.9] sm:leading-[0.85]">
+          <div className="flex flex-col gap-4">
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">
               Debug faster.
               <br />
               <span className="bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-500 bg-clip-text text-transparent">Build smarter.</span>
             </h1>
-            <p className="text-base sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed font-medium tracking-tight mt-2">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed mt-2 font-medium">
               AI-powered troubleshooting for the next generation of IoT and web hardware. Pick your stack and get streaming diagnostics in seconds.
             </p>
           </div>
         </div>
 
         {/* Domain cards */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-8">
           <p className="section-label px-2">
             Intelligence Domains
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
             <DomainCard
               href="/iot"
               icon="🔩"
@@ -156,21 +156,21 @@ export default function LandingPage() {
         </div>
 
         {/* Bot quick links */}
-        <div className="flex flex-col gap-10 animate-fade-in-up delay-300 mb-20">
+        <div className="flex flex-col gap-8 animate-fade-in-up delay-300 mb-20">
           <p className="section-label px-2">
-            Rapid access protocols
+            Rapid Access
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6">
             {BOTS.map((bot) => (
               <Link
                 key={bot.id}
                 href={`/bots/${bot.id}`}
-                className="card-elevated flex flex-col items-center gap-5 py-10 px-6 rounded-[2.5rem] group hover:-translate-y-3 transition-all duration-500 border border-white/20 dark:border-gray-800 bg-white/40 dark:bg-gray-900/40 backdrop-blur-md"
+                className="card-elevated flex flex-col items-center gap-4 py-8 px-4 rounded-2xl group hover:-translate-y-2 transition-all duration-300 border border-gray-100 dark:border-gray-800 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm"
               >
-                <div className="w-16 h-16 rounded-3xl bg-white dark:bg-gray-800 shadow-xl shadow-indigo-100/50 dark:shadow-none flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-500">
+                <div className="w-14 h-14 rounded-2xl bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
                    {bot.icon}
                 </div>
-                <span className="text-[13px] font-black text-gray-800 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight text-center tracking-widest uppercase">
+                <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight text-center">
                   {bot.label}
                 </span>
               </Link>
