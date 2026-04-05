@@ -13,6 +13,8 @@ import Header from "@/app/components/header";
 import { ResultsList } from "@/app/components/problem-card";
 import AiAssistant from "@/app/components/ai-assistant";
 import HardwareVisualizer from "@/app/components/hardware-visualizer";
+import DiagnosticWizard from "@/app/components/diagnostic-wizard";
+import { DIAGNOSTIC_TREES } from "@/lib/data";
 
 const MCU_GROUPS = Array.from(new Set(MICROCONTROLLERS.map((m) => m.group)));
 
@@ -34,6 +36,9 @@ export default function IotPage() {
   const [results, setResults] = useState<Problem[]>([]);
   const [searched, setSearched] = useState(false);
   const [isAiActive, setIsAiActive] = useState(false);
+  const [activeWizardId, setActiveWizardId] = useState<string | null>(null);
+
+  const activeTree = DIAGNOSTIC_TREES.find((t) => t.id === activeWizardId);
 
   const selectedCompObjects = COMPONENT_CATEGORIES.flatMap((c) =>
     c.components.filter((co) => selectedComponents.has(co.id))
@@ -339,14 +344,32 @@ export default function IotPage() {
                 className="btn-primary !px-10 !py-5 uppercase tracking-widest text-[11px] font-black shrink-0 flex items-center gap-2 group shadow-xl shadow-indigo-100"
               >
                 🧠 Ask AI Debugger
-                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
+              </button>
+
+              <button 
+                onClick={() => setActiveWizardId("iot_power")}
+                className="px-8 py-5 rounded-[1.5rem] bg-white border-2 border-indigo-100 text-[11px] font-black uppercase tracking-widest text-indigo-600 hover:bg-indigo-50 transition-all shadow-lg shadow-indigo-50 flex items-center gap-2 group"
+              >
+                ⚡ Triage Protocol
               </button>
             </div>
           </div>
         )}
         
+        {isAiActive && (
+          <div className="fixed bottom-10 right-10 z-50 animate-scale-up origin-bottom-right">
+            <AiAssistant 
+              context={contextStr} 
+              initialIssue={query}
+              onClose={() => setIsAiActive(false)}
+            />
+          </div>
+        )}
+
+        {activeTree && (
+           <DiagnosticWizard tree={activeTree} onClose={() => setActiveWizardId(null)} />
+        )}
+
         <div className="h-6" />
       </main>
     </div>
