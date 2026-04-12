@@ -201,6 +201,22 @@ export const MICROCONTROLLERS: Microcontroller[] = [
     description: "WiFi + BT, 240 MHz, 520 KB SRAM",
   },
   {
+    id: "esp32s3",
+    label: "ESP32-S3",
+    group: "ESP",
+    icon: "📡",
+    voltage: "3.3 V",
+    description: "Native USB, AI instructions, WiFi+BLE",
+  },
+  {
+    id: "esp32c3",
+    label: "ESP32-C3",
+    group: "ESP",
+    icon: "📡",
+    voltage: "3.3 V",
+    description: "RISC-V core, WiFi+BLE, power efficient",
+  },
+  {
     id: "esp8266",
     label: "ESP8266",
     group: "ESP",
@@ -224,6 +240,14 @@ export const MICROCONTROLLERS: Microcontroller[] = [
     icon: "🔵",
     voltage: "5 V",
     description: "ATmega328P, compact",
+  },
+  {
+    id: "leonardo",
+    label: "Leonardo",
+    group: "Arduino",
+    icon: "🔵",
+    voltage: "5 V",
+    description: "ATmega32U4, Native USB HID",
   },
   {
     id: "mega",
@@ -265,6 +289,23 @@ export const MICROCONTROLLERS: Microcontroller[] = [
     icon: "🫐",
     voltage: "3.3 V",
     description: "RP2040, MicroPython, WiFi",
+  },
+  // ARM & Specialized
+  {
+    id: "stm32",
+    label: "STM32F103",
+    group: "ARM / Others",
+    icon: "⚡",
+    voltage: "3.3 V",
+    description: "Blue Pill, Cortex-M3, 72 MHz",
+  },
+  {
+    id: "teensy41",
+    label: "Teensy 4.1",
+    group: "ARM / Others",
+    icon: "🚀",
+    voltage: "3.3 V",
+    description: "Cortex-M7, 600 MHz, high-perf",
   },
 ];
 
@@ -730,6 +771,14 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
         voltage: "5–12 V",
         interface: "I2C / SPI",
         description: "L293D-based shield, 4 DC / 2 stepper",
+      },
+      {
+        id: "tb6600",
+        label: "TB6600",
+        icon: "🚂",
+        voltage: "9–42 V",
+        interface: "DIR / STEP / EN",
+        description: "High-current stepper driver, 4 A",
       },
     ],
   },
