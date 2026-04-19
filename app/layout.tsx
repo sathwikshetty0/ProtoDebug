@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import CommandPalette from "@/app/components/command-palette";
+import { ThemeProvider } from "@/app/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,8 +31,14 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
-        <CommandPalette />
-        <div className="flex-grow">{children}</div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <CommandPalette />
+          <div className="flex-grow">{children}</div>
         
         <footer className="w-full border-t border-card-border bg-card-bg py-10">
           <div className="mx-auto max-w-7xl px-8 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -57,9 +64,10 @@ export default function RootLayout({
                 <span>India</span>
               </div>
             </div>
-          </footer>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+          </div>
+        </footer>
+      </ThemeProvider>
+    </body>
+  </html>
+);
 }
