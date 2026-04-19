@@ -22,6 +22,7 @@
   --card-border: #1f2937;
   --card-shadow: 0 4px 20px rgba(0,0,0,0.4);
   --card-shadow-hover: 0 8px 30px rgba(99,102,241,0.15), 0 4px 12px rgba(0,0,0,0.3);
+  --card-shadow-lg: 0 8px 32px rgba(99,102,241,0.15), 0 2px 8px rgba(0,0,0,0.2);
   --input-bg: #0f172a;
   --chip-bg: #1f2937;
   --chip-text: #d1d5db;
@@ -76,6 +77,13 @@ body {
   touch-action: manipulation;
   box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
+
+.dark .quick-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #a1a1aa;
+}
+
 .quick-chip:hover,
 .quick-chip:active {
   border-color: #a5b4fc;
@@ -83,6 +91,12 @@ body {
   color: #818cf8;
   box-shadow: 0 2px 8px rgba(99,102,241,0.12);
   transform: translateY(-1px);
+}
+
+.dark .quick-chip:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c7d2fe;
 }
 
 /* ────────────────────────────────────────
@@ -95,10 +109,20 @@ body {
   box-shadow: var(--card-shadow);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.dark .card-elevated {
+  background: #121214;
+  border-color: #27272a;
+}
+
 .card-elevated:hover {
   border-color: #6366f1;
   box-shadow: var(--card-shadow-hover);
   transform: translateY(-2px);
+}
+
+.dark .card-elevated:hover {
+  border-color: #4f46e5;
 }
 
 /* ────────────────────────────────────────
@@ -109,6 +133,11 @@ body {
   border: 1px solid var(--card-border);
   border-radius: 1rem;
   box-shadow: var(--card-shadow);
+}
+
+.dark .section-card {
+  background: #121214;
+  border-color: #27272a;
 }
 
 /* ────────────────────────────────────────
@@ -189,10 +218,18 @@ body {
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
+
+.dark .input-polished {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f4f4f5;
+}
+
 .input-polished::placeholder {
   color: #9ca3af;
   opacity: 0.5;
 }
+
 .input-polished:focus {
   outline: none;
   border-color: #818cf8;
