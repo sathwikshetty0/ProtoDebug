@@ -145,13 +145,16 @@ export default function LandingPage() {
               subtitle="React, APIs, and high-fidelity fixes for the modern web stack."
               delay="delay-200"
             />
-            <DomainCard
-              href="/bots"
-              icon="🤖"
-              title="Robotics Suite"
-              subtitle="End-to-end bot masterclasses with intelligent issue discovery."
-              delay="delay-300"
-            />
+            <div className="relative">
+              <span className="absolute -top-3 -right-2 z-10 bg-indigo-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-indigo-200 dark:shadow-none animate-bounce">NEW</span>
+              <DomainCard
+                href="/bots"
+                icon="🤖"
+                title="Robotics Suite"
+                subtitle="End-to-end bot masterclasses with intelligent issue discovery."
+                delay="delay-300"
+              />
+            </div>
           </div>
         </div>
 
