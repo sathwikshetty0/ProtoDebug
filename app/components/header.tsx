@@ -31,7 +31,11 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2 px-2 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tight">Search</span>
+            <kbd className="px-1.5 py-0.5 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-600 text-[10px] font-black text-gray-500">⌘K</kbd>
+          </div>
           <ThemeToggle />
         </div>
       </div>
