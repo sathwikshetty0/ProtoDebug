@@ -53,7 +53,7 @@ function DomainCard({
   return (
     <Link
       href={href}
-      className={`card-elevated flex flex-col gap-4 p-6 sm:p-8 rounded-2xl group animate-fade-in-up border border-gray-100 dark:border-gray-800 hover:border-indigo-100 dark:hover:border-indigo-800 transition-all duration-300 ${delay ?? ""}`}
+      className={`card-elevated flex flex-col gap-4 p-6 sm:p-8 rounded-2xl group animate-fade-in-up border border-gray-100 dark:border-gray-800 hover:border-indigo-200 dark:hover:border-indigo-800 hover:bg-white dark:hover:bg-gray-800/80 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 ${delay ?? ""}`}
     >
       <div className="w-14 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform duration-300 shadow-sm border border-gray-100 dark:border-gray-700">
         {icon}
