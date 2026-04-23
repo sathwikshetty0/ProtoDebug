@@ -117,7 +117,7 @@ export default function LandingPage() {
             <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">
               Debug faster.
               <br />
-              <span className="bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-500 bg-clip-text text-transparent">Build smarter.</span>
+              <span className="bg-gradient-to-r from-indigo-600 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent animate-gradient-x">Build smarter.</span>
             </h1>
             <p className="text-base sm:text-lg lg:text-xl text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed mt-2 font-medium">
               AI-powered troubleshooting for the next generation of IoT and web hardware. Pick your stack and get streaming diagnostics in seconds.
