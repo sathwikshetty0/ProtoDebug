@@ -15,8 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ProtoDebug — AI Debugging for IoT & Web",
-  description: "AI-powered debugging assistant for IoT and web development prototyping",
+  title: "ProtoDebug — Advanced AI Debugging for IoT, Web & Robotics",
+  description: "Accelerate your prototyping with AI-powered diagnostics. Expert troubleshooting for microcontrollers, sensors, and modern web applications.",
+  keywords: ["IoT debugging", "hardware troubleshooting", "AI assistant", "robotics protocols", "web development", "circuit diagnostics"],
+  authors: [{ name: "Sathwik Shetty" }],
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
 };
 
 export default function RootLayout({
