@@ -3,7 +3,7 @@ import ThemeToggle from "@/app/components/theme-toggle";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 glass-header px-4 sm:px-6 py-3 min-h-[72px] flex items-center dark:bg-zinc-950/40 dark:border-white/10 dark:backdrop-blur-xl transition-all duration-300">
+    <header className="sticky top-0 z-50 px-4 sm:px-6 py-4 flex items-center bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl border-b border-gray-100 dark:border-white/5 transition-all duration-300">
       <div className="max-w-7xl w-full mx-auto flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80 group shrink-0">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center shadow-md shadow-indigo-100 dark:shadow-none group-hover:scale-105 transition-transform duration-300">
