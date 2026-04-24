@@ -21,10 +21,12 @@ Access end-to-end build guides and real-time troubleshooting for lab systems lik
 
 ## ✨ Features
 
-- **Immersive "Lab" UI**: A premium light-themed aesthetic with glassmorphism, smooth animations, and high-contrast typography.
-- **Micro-Interaction System**: Animated state transitions and responsive step-by-step guidance.
-- **Intelligence Search**: AI-powered discovery of troubleshooting protocols based on component combinations and failure descriptions.
-- **Code Injection**: Direct snippets for testing fixes in your local environment.
+- **🧠 Integrated AI Debugger**: Persistent assistant with dark mode support, minimize/maximize functionality, and interactive example queries for deep diagnostics.
+- **⚡ Proactive Navigation**: Global command palette (⌘K), breadcrumb trails, and scroll-progress indicators for lightning-fast workflow.
+- **🛡️ Expert Protocols**: Advanced "Expert Mode" in Hardware Lab for deep register/interface visibility and complexity-aware robotics masterclasses.
+- **🔔 Live Notifications**: Integrated toast system for immediate feedback on copying, sharing, and diagnostic actions.
+- **📉 History Tracking**: Automatic local persistence for "Recently Viewed" channels and progress tracking in robotics suites.
+- **📱 Responsive Lab UI**: A premium adaptive design featuring custom scrollbars, glassmorphic headers, and optimized mobile layouts.
 
 ---
 
