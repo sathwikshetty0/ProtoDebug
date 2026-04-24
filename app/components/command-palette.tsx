@@ -4,6 +4,30 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { MICROCONTROLLERS, COMPONENT_CATEGORIES, BOTS } from "@/lib/data";
 
+function CommandItem({ 
+  item, 
+  onClick 
+}: { 
+  item: any, 
+  onClick: () => void 
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 group transition-colors"
+    >
+      <div className="flex items-center gap-4">
+        <span className="text-2xl group-hover:scale-110 transition-transform">{item.icon}</span>
+        <div className="text-left">
+          <p className="text-sm font-black text-gray-900 dark:text-white">{item.label}</p>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{item.type}</p>
+        </div>
+      </div>
+      <span className="text-gray-300 group-hover:text-indigo-500 transition-colors">→</span>
+    </button>
+  );
+}
+
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -62,23 +86,14 @@ export default function CommandPalette() {
         <div className="p-2 max-h-[60vh] overflow-y-auto">
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => (
-              <button
+              <CommandItem
                 key={`${item.type}-${item.id}`}
+                item={item}
                 onClick={() => {
                   router.push(item.href);
                   setIsOpen(false);
                 }}
-                className="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 group transition-colors"
-              >
-                <div className="flex items-center gap-4">
-                  <span className="text-2xl group-hover:scale-110 transition-transform">{item.icon}</span>
-                  <div className="text-left">
-                    <p className="text-sm font-black text-gray-900 dark:text-white">{item.label}</p>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{item.type}</p>
-                  </div>
-                </div>
-                <span className="text-gray-300 group-hover:text-indigo-500 transition-colors">→</span>
-              </button>
+              />
             ))
           ) : (
             <div className="p-8 text-center">
