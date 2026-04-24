@@ -309,8 +309,17 @@ export default function IotPage() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Describe current system state..."
-                  className="w-full input-polished pl-12 min-w-0"
+                  className="w-full input-polished pl-12 pr-10 min-w-0"
                 />
+                {query && (
+                  <button
+                    type="button"
+                    onClick={() => { setQuery(""); setSearched(false); }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 transition-colors"
+                  >
+                    ×
+                  </button>
+                )}
               </div>
               <button
                 type="submit"
