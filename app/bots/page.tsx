@@ -5,10 +5,16 @@ import Header from "@/app/components/header";
 
 export default function BotsPage() {
   const [query, setQuery] = useState("");
-  const filteredBots = BOTS.filter(bot => 
-    bot.label.toLowerCase().includes(query.toLowerCase()) || 
-    bot.description.toLowerCase().includes(query.toLowerCase())
-  );
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+
+  const categories = ["All", "Mobile", "Arm", "Specialized", "Experimental"];
+
+  const filteredBots = BOTS.filter(bot => {
+    const matchesQuery = bot.label.toLowerCase().includes(query.toLowerCase()) || 
+                        bot.description.toLowerCase().includes(query.toLowerCase());
+    const matchesCategory = activeCategory === "All" || bot.category === activeCategory;
+    return matchesQuery && matchesCategory;
+  });
 
   return (
     <div className="min-h-screen page-gradient">
@@ -22,14 +28,31 @@ export default function BotsPage() {
               End-to-end bot guides and real-time troubleshooting protocols for current robotics lab systems.
             </p>
           </div>
-          <div className="relative w-full sm:w-64">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">🔍</span>
-            <input 
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Filter masterclasses..."
-              className="w-full input-polished !py-2 !px-8 text-xs font-semibold"
-            />
+          <div className="flex flex-col gap-4 items-end">
+            <div className="flex flex-wrap gap-2 justify-end">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full border transition-all ${
+                    activeCategory === cat 
+                      ? "bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none" 
+                      : "bg-white dark:bg-zinc-900 border-gray-200 dark:border-zinc-800 text-gray-400 hover:text-gray-600"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <div className="relative w-full sm:w-64">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">🔍</span>
+              <input 
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Filter masterclasses..."
+                className="w-full input-polished !py-2 !px-8 text-xs font-semibold"
+              />
+            </div>
           </div>
         </div>
 

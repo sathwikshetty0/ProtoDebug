@@ -177,6 +177,7 @@ export interface Bot {
   id: string;
   label: string;
   icon: string;
+  category: "Mobile" | "Arm" | "Specialized" | "Experimental";
   difficulty: "Beginner" | "Intermediate" | "Advanced";
   description: string;
   /** Short hardware overview shown on bot card */
@@ -901,6 +902,7 @@ export const BOTS: Bot[] = [
     id: "line_follower",
     label: "Line Follower",
     icon: "〰️",
+    category: "Mobile",
     difficulty: "Beginner",
     description: "PID-controlled robot that follows a black line on white surface using IR sensor array.",
     hardware: ["Arduino Nano/Uno", "5-ch or 8-ch IR array", "L298N / TB6612FNG", "N20 geared motors", "LiPo 7.4 V"],
@@ -987,6 +989,7 @@ void loop() {
     id: "maze_solver",
     label: "Maze Solver",
     icon: "🧩",
+    category: "Mobile",
     difficulty: "Intermediate",
     description: "Robot navigates a maze using left-hand rule or flood-fill algorithm with IR sensors.",
     hardware: ["Arduino Mega", "3× TCRT5000 or 5-ch array", "L298N", "N20 or TT motors", "LiPo 7.4 V"],
@@ -1059,6 +1062,7 @@ void simplify() {
     id: "rc_race_bot",
     label: "RC Race Bot",
     icon: "🏎️",
+    category: "Mobile",
     difficulty: "Intermediate",
     description: "Remote-controlled high-speed bot using ESP-NOW wireless or RF remote with brushless or brushed motors.",
     hardware: ["ESP32 (×2 for ESP-NOW)", "BTS7960 / ESC", "Johnson / Brushless motor", "LiPo 11.1 V", "Servo for steering"],
@@ -1162,6 +1166,7 @@ void loop() {
     id: "soccer_bot",
     label: "Soccer Bot",
     icon: "⚽",
+    category: "Mobile",
     difficulty: "Advanced",
     description: "Competitive soccer robot with IR ball tracking, opponent detection, and differential drive.",
     hardware: ["Arduino Mega / ESP32", "BTS7960 dual H-bridge", "Johnson 550 motors", "IR ball sensor", "LiPo 11.1 V"],
@@ -1224,6 +1229,7 @@ void omniDrive(float vx, float vy, float omega) {
     id: "pick_and_place",
     label: "Pick & Place Bot",
     icon: "🦾",
+    category: "Arm",
     difficulty: "Advanced",
     description: "Robotic arm on a chassis that picks and places objects using servos and DC motors.",
     hardware: ["Arduino Mega / Uno", "Adafruit Motor Shield v2", "MG996R servos (×3–4)", "L293D / L298N", "12 V DC supply"],
@@ -1304,6 +1310,7 @@ bool solveIK(float x, float y, float &a1, float &a2) {
     id: "pid_reference",
     label: "PID Controller",
     icon: "📐",
+    category: "Specialized",
     difficulty: "Intermediate",
     description: "Reference guide for PID tuning — Kp, Ki, Kd methodology, integral windup, and derivative filter.",
     hardware: ["Any MCU", "Motor driver", "Encoder or sensor feedback"],
