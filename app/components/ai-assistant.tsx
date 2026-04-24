@@ -121,11 +121,27 @@ export default function AiAssistant({
         className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-gray-50/50"
       >
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center gap-3 opacity-50">
-            <span className="text-4xl">🧠</span>
-            <p className="text-sm font-medium text-gray-500">
-              Ready to analyze {context}
-            </p>
+          <div className="flex flex-col items-center justify-center h-full text-center gap-6 opacity-80">
+            <div className="flex flex-col items-center gap-3">
+              <span className="text-5xl animate-bounce">🧠</span>
+              <p className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest">
+                Ready to analyze {context}
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 w-full max-w-sm">
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Try asking</p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {["Explain voltage dividers", "I2C addressing issues", "Brownout reset causes"].map((q) => (
+                  <button 
+                    key={q}
+                    onClick={() => handleSend(q)}
+                    className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-bold rounded-xl border border-indigo-100 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
         {messages.map((msg, i) => (
