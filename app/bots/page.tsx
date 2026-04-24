@@ -1,22 +1,40 @@
+import { useState } from "react";
 import Link from "next/link";
 import { BOTS } from "@/lib/data";
 import Header from "@/app/components/header";
 
 export default function BotsPage() {
+  const [query, setQuery] = useState("");
+  const filteredBots = BOTS.filter(bot => 
+    bot.label.toLowerCase().includes(query.toLowerCase()) || 
+    bot.description.toLowerCase().includes(query.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen page-gradient">
       <Header />
       <main className="max-w-7xl mx-auto px-8 sm:px-12 py-8 flex flex-col gap-10">
 
-        <div className="animate-fade-in-up flex flex-col gap-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">Robotics Suite</h1>
-          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-2xl">
-            End-to-end bot guides and real-time troubleshooting protocols for current robotics lab systems.
-          </p>
+        <div className="animate-fade-in-up flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">Robotics Suite</h1>
+            <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-2xl">
+              End-to-end bot guides and real-time troubleshooting protocols for current robotics lab systems.
+            </p>
+          </div>
+          <div className="relative w-full sm:w-64">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">🔍</span>
+            <input 
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Filter masterclasses..."
+              className="w-full input-polished !py-2 !px-8 text-xs font-semibold"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up delay-100">
-          {BOTS.map((bot, i) => (
+          {filteredBots.map((bot, i) => (
             <Link
               key={bot.id}
               href={`/bots/${bot.id}`}
