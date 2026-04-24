@@ -44,17 +44,40 @@ body {
 }
 
 /* ────────────────────────────────────────
+   Custom Scrollbar
+   ──────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.2);
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.4);
+  background-clip: content-box;
+}
+
+/* ────────────────────────────────────────
    Subtle background pattern / gradient
    ──────────────────────────────────────── */
 .page-gradient {
   background:
-    radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99,102,241,0.06) 0%, transparent 70%),
+    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.04) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.04) 0%, transparent 20%),
     linear-gradient(180deg, var(--background) 0%, var(--background) 100%);
 }
 
 .dark .page-gradient {
   background:
-    radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99,102,241,0.15) 0%, transparent 70%),
+    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
     linear-gradient(180deg, #030712 0%, #080c1d 100%);
 }
 
