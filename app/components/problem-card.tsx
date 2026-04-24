@@ -117,11 +117,25 @@ export function ResultsList({
 }) {
   return (
     <section className="flex flex-col gap-3">
-      <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold px-1 uppercase tracking-wider">
-        {results.length === 0
-          ? "No matches"
-          : `${results.length} result${results.length !== 1 ? "s" : ""} for ${label}`}
-      </p>
+      <div className="flex items-center justify-between px-1">
+        <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-wider">
+          {results.length === 0
+            ? "No matches"
+            : `${results.length} result${results.length !== 1 ? "s" : ""} for ${label}`}
+        </p>
+        {results.length > 0 && (
+          <button 
+            onClick={() => {
+              const text = results.map(r => `${r.title}\n${r.description}`).join('\n\n---\n\n');
+              navigator.clipboard.writeText(text);
+              toast("Full report copied!");
+            }}
+            className="text-[10px] font-black text-indigo-600 hover:text-indigo-700 uppercase tracking-tighter transition-colors"
+          >
+            Copy Report
+          </button>
+        )}
+      </div>
       {results.length === 0 ? (
         <div className="section-card rounded-2xl p-10 text-center">
           <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
