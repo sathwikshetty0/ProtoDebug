@@ -197,6 +197,49 @@ export default function LandingPage() {
           </div>
         </div>
 
+        {/* Featured Bot */}
+        <section className="animate-fade-in-up delay-[400ms]">
+          <div className="flex items-center justify-between mb-8 px-2">
+            <div className="flex flex-col gap-1">
+              <h2 className="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight">Expert Protocol</h2>
+              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">Recommended for advanced labs</p>
+            </div>
+          </div>
+          <Link href="/bots/soccer_bot" className="block group">
+            <div className="relative overflow-hidden rounded-[2.5rem] bg-indigo-600 p-8 sm:p-14 text-white shadow-2xl shadow-indigo-200 dark:shadow-none border border-white/10">
+              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full -translate-y-1/2 translate-x-1/3 blur-[100px] group-hover:scale-125 transition-transform duration-1000 pointer-events-none" />
+              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+                <div className="flex flex-col gap-6 max-w-2xl">
+                  <div className="flex items-center gap-3">
+                    <span className="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md">Featured</span>
+                    <span className="text-white/60 text-[10px] font-bold uppercase tracking-[0.2em]">Soccer Bot ⚽</span>
+                  </div>
+                  <h3 className="text-4xl sm:text-5xl font-black tracking-tighter leading-[1.1]">Mastering High-Speed IR Ball Tracking</h3>
+                  <p className="text-indigo-100 text-base sm:text-lg leading-relaxed opacity-90 font-medium">
+                    Dive deep into 1200Hz signal processing, omnidirectional drive math, and competitive robotics strategy in our most comprehensive guide.
+                  </p>
+                  <div className="flex flex-wrap gap-8 mt-4">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Complexity</span>
+                      <span className="text-xl font-black">Advanced</span>
+                    </div>
+                    <div className="w-px h-12 bg-white/20 hidden sm:block" />
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Est. Time</span>
+                      <span className="text-xl font-black">4 Hours</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-shrink-0 lg:ml-auto">
+                   <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-[2rem] bg-white/10 backdrop-blur-md flex items-center justify-center text-5xl sm:text-6xl group-hover:rotate-[15deg] group-hover:scale-110 transition-all duration-700 shadow-2xl border border-white/20">
+                     ⚽
+                   </div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </section>
+
         {/* Bot quick links */}
         <div className="flex flex-col gap-8 animate-fade-in-up delay-300 mb-20">
           <p className="section-label px-2">
