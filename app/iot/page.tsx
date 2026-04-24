@@ -37,6 +37,7 @@ export default function IotPage() {
   const [searched, setSearched] = useState(false);
   const [isAiActive, setIsAiActive] = useState(false);
   const [activeWizardId, setActiveWizardId] = useState<string | null>(null);
+  const [expertMode, setExpertMode] = useState(false);
 
   const activeTree = DIAGNOSTIC_TREES.find((t) => t.id === activeWizardId);
 
@@ -86,11 +87,26 @@ export default function IotPage() {
       <Header />
       <main className="max-w-7xl mx-auto px-8 sm:px-12 py-8 flex flex-col gap-8">
 
-        <div className="animate-fade-in-up flex flex-col gap-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">Hardware Lab</h1>
-          <p className="text-sm sm:text-base text-gray-500 max-w-2xl">
-            Pick your MCU, add components, then describe the issue to pinpoint the solution.
-          </p>
+        <div className="animate-fade-in-up flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">Hardware Lab</h1>
+            <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-2xl">
+              Pick your MCU, add components, then describe the issue to pinpoint the solution.
+            </p>
+          </div>
+          <button 
+            onClick={() => setExpertMode(!expertMode)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
+              expertMode 
+                ? "bg-indigo-600 border-indigo-600 text-white" 
+                : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500"
+            }`}
+          >
+            <span className="text-xs font-black uppercase tracking-widest">{expertMode ? "Expert Active" : "Expert Mode"}</span>
+            <div className={`w-8 h-4 rounded-full relative transition-colors ${expertMode ? 'bg-indigo-400' : 'bg-gray-200'}`}>
+               <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${expertMode ? 'left-4.5' : 'left-0.5'}`} />
+            </div>
+          </button>
         </div>
 
         {/* AI FAB Toggle */}
@@ -139,6 +155,11 @@ export default function IotPage() {
                       <span className="text-2xl transition-transform group-hover:scale-110">{m.icon}</span>
                       <span className="text-xs font-semibold leading-tight">{m.label}</span>
                       <span className="text-[10px] text-gray-400 font-medium">{m.voltage}</span>
+                      {expertMode && (
+                        <span className="text-[9px] text-gray-500 dark:text-gray-400 leading-tight mt-1 opacity-70 italic line-clamp-2">
+                          {m.description}
+                        </span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -196,6 +217,11 @@ export default function IotPage() {
                       >
                         <span className="text-2xl transition-transform group-hover:scale-110">{comp.icon}</span>
                         <span className="text-[11px] font-semibold leading-tight">{comp.label}</span>
+                        {expertMode && (
+                          <span className="text-[9px] text-indigo-500/80 font-black uppercase mt-1">
+                            {comp.interface}
+                          </span>
+                        )}
                       </button>
                     ))}
                   </div>
