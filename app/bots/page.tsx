@@ -88,9 +88,14 @@ export default function BotsPage() {
                 </div>
               </div>
               <div className="flex items-center justify-between pt-5 border-t border-gray-100 dark:border-gray-800 mt-2">
-                <span className="text-xs text-gray-600 dark:text-gray-300 font-medium bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700">
-                  {bot.learnSections.length} Protocols
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-600 dark:text-gray-300 font-medium bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700">
+                    {bot.learnSections.length} Protocols
+                  </span>
+                  <span className="text-[10px] font-bold text-gray-400 flex items-center gap-1.5 uppercase tracking-tighter">
+                    <span className="text-indigo-500">⏱</span> {bot.estimatedTime}
+                  </span>
+                </div>
                 <div className="flex items-center gap-1 group/btn">
                   <span className="text-sm text-indigo-600 dark:text-indigo-400 font-semibold group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors">
                     Deploy Lab

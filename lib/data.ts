@@ -179,6 +179,7 @@ export interface Bot {
   icon: string;
   category: "Mobile" | "Arm" | "Specialized" | "Experimental";
   difficulty: "Beginner" | "Intermediate" | "Advanced";
+  estimatedTime: string;
   description: string;
   /** Short hardware overview shown on bot card */
   hardware: string[];
@@ -904,6 +905,7 @@ export const BOTS: Bot[] = [
     icon: "〰️",
     category: "Mobile",
     difficulty: "Beginner",
+    estimatedTime: "45 mins",
     description: "PID-controlled robot that follows a black line on white surface using IR sensor array.",
     hardware: ["Arduino Nano/Uno", "5-ch or 8-ch IR array", "L298N / TB6612FNG", "N20 geared motors", "LiPo 7.4 V"],
     problemTags: ["line_follower", "ir_array", "pid", "n20_motor", "l298n", "tb6612fng"],
@@ -991,6 +993,7 @@ void loop() {
     icon: "🧩",
     category: "Mobile",
     difficulty: "Intermediate",
+    estimatedTime: "1.5 hours",
     description: "Robot navigates a maze using left-hand rule or flood-fill algorithm with IR sensors.",
     hardware: ["Arduino Mega", "3× TCRT5000 or 5-ch array", "L298N", "N20 or TT motors", "LiPo 7.4 V"],
     problemTags: ["maze_solver", "ir_array", "pid", "junction", "n20_motor", "l298n"],
@@ -1064,6 +1067,7 @@ void simplify() {
     icon: "🏎️",
     category: "Mobile",
     difficulty: "Intermediate",
+    estimatedTime: "2 hours",
     description: "Remote-controlled high-speed bot using ESP-NOW wireless or RF remote with brushless or brushed motors.",
     hardware: ["ESP32 (×2 for ESP-NOW)", "BTS7960 / ESC", "Johnson / Brushless motor", "LiPo 11.1 V", "Servo for steering"],
     problemTags: ["rc_bot", "esp_now", "bts7960", "brushless_esc", "johnson_motor", "wireless"],
@@ -1168,6 +1172,7 @@ void loop() {
     icon: "⚽",
     category: "Mobile",
     difficulty: "Advanced",
+    estimatedTime: "4 hours",
     description: "Competitive soccer robot with IR ball tracking, opponent detection, and differential drive.",
     hardware: ["Arduino Mega / ESP32", "BTS7960 dual H-bridge", "Johnson 550 motors", "IR ball sensor", "LiPo 11.1 V"],
     problemTags: ["soccer_bot", "bts7960", "johnson_motor", "esp_now", "ir_ball", "differential"],
@@ -1231,6 +1236,7 @@ void omniDrive(float vx, float vy, float omega) {
     icon: "🦾",
     category: "Arm",
     difficulty: "Advanced",
+    estimatedTime: "3 hours",
     description: "Robotic arm on a chassis that picks and places objects using servos and DC motors.",
     hardware: ["Arduino Mega / Uno", "Adafruit Motor Shield v2", "MG996R servos (×3–4)", "L293D / L298N", "12 V DC supply"],
     problemTags: ["pick_place", "servo_mg996r", "afmotor", "timer_conflict", "i2c"],
@@ -1312,6 +1318,7 @@ bool solveIK(float x, float y, float &a1, float &a2) {
     icon: "📐",
     category: "Specialized",
     difficulty: "Intermediate",
+    estimatedTime: "1 hour",
     description: "Reference guide for PID tuning — Kp, Ki, Kd methodology, integral windup, and derivative filter.",
     hardware: ["Any MCU", "Motor driver", "Encoder or sensor feedback"],
     problemTags: ["pid", "kp", "ki", "kd", "tuning", "windup", "oscillation"],
