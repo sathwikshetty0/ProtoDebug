@@ -94,7 +94,7 @@ export default function AiAssistant({
   }
 
   return (
-    <div className="flex flex-col h-[500px] sm:h-[600px] w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-indigo-100 overflow-hidden animate-scale-up">
+    <div className="flex flex-col h-[500px] sm:h-[600px] w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-indigo-100 dark:border-gray-800 overflow-hidden animate-scale-up">
       {/* Header */}
       <div className="px-5 py-3 sm:px-6 sm:py-4 bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -136,8 +136,8 @@ export default function AiAssistant({
             <div 
               className={`max-w-[85%] px-5 py-4 rounded-2xl text-sm font-medium leading-relaxed shadow-sm ${
                 msg.role === "user" 
-                  ? "bg-indigo-600 text-white rounded-tr-none" 
-                  : "bg-white text-gray-800 border border-gray-100 rounded-tl-none"
+                  ? "bg-indigo-600 dark:bg-indigo-500 text-white rounded-tr-none" 
+                  : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-gray-700 rounded-tl-none shadow-indigo-100/10"
               }`}
             >
               <div className="whitespace-pre-wrap break-words">
@@ -158,7 +158,7 @@ export default function AiAssistant({
       {/* Input */}
       <form 
         onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
-        className="p-4 bg-white border-t border-gray-100 flex gap-3"
+        className="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-3"
       >
         <input 
           value={input}
