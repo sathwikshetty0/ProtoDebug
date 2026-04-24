@@ -8,6 +8,7 @@ import Header from "@/app/components/header";
 import { ResultsList } from "@/app/components/problem-card";
 import AiAssistant from "@/app/components/ai-assistant";
 import CodeBlock from "@/app/components/code-block";
+import Breadcrumbs from "@/app/components/breadcrumbs";
 
 type Tab = "learn" | "debug";
 
@@ -171,15 +172,8 @@ export default function BotDetailPage() {
       <Header />
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col gap-6">
 
-        {/* Breadcrumb */}
         <div className="flex items-center justify-between animate-fade-in-up">
-          <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
-            <Link href="/bots" className="hover:text-indigo-500 transition-colors">
-              Bots
-            </Link>
-            <span className="text-gray-300">/</span>
-            <span className="text-gray-800 dark:text-gray-200 font-semibold whitespace-nowrap">{bot.label}</span>
-          </div>
+          <Breadcrumbs />
           
           <div className="flex items-center gap-3">
              <div className="flex flex-col items-end">
