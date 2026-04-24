@@ -14,6 +14,7 @@ import { ResultsList } from "@/app/components/problem-card";
 import AiAssistant from "@/app/components/ai-assistant";
 import HardwareVisualizer from "@/app/components/hardware-visualizer";
 import DiagnosticWizard from "@/app/components/diagnostic-wizard";
+import Breadcrumbs from "@/app/components/breadcrumbs";
 import { DIAGNOSTIC_TREES } from "@/lib/data";
 
 const MCU_GROUPS = Array.from(new Set(MICROCONTROLLERS.map((m) => m.group)));
@@ -86,7 +87,7 @@ export default function IotPage() {
     <div className="min-h-screen page-gradient">
       <Header />
       <main className="max-w-7xl mx-auto px-8 sm:px-12 py-8 flex flex-col gap-8">
-
+        <Breadcrumbs />
         <div className="animate-fade-in-up flex flex-col sm:flex-row sm:items-end justify-between gap-6">
           <div className="flex flex-col gap-2">
             <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">Hardware Lab</h1>

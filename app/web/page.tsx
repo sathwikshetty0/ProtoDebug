@@ -5,6 +5,7 @@ import { WEB_DOMAINS, searchWebProblems, type WebDomain, type Problem } from "@/
 import Header from "@/app/components/header";
 import { ResultsList } from "@/app/components/problem-card";
 import AiAssistant from "@/app/components/ai-assistant";
+import Breadcrumbs from "@/app/components/breadcrumbs";
 
 function StepLabel({ n, text }: { n: number; text: string }) {
   return (
@@ -57,7 +58,7 @@ export default function WebPage() {
     <div className="min-h-screen page-gradient">
       <Header />
       <main className="max-w-7xl mx-auto px-8 sm:px-12 py-8 flex flex-col gap-8">
-
+        <Breadcrumbs />
         <div className="animate-fade-in-up flex flex-col gap-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">Web Application Lab</h1>
           <p className="text-sm sm:text-base text-gray-500 max-w-2xl">
