@@ -81,7 +81,10 @@ function DomainCard({
 export default function LandingPage() {
   const [progress, setProgress] = useState<BotProgress[]>([]);
 
+  const [recentBots, setRecentBots] = useState<typeof BOTS>([]);
+
   useEffect(() => {
+    // Active progress
     const active = BOTS.map((bot) => {
       const saved = localStorage.getItem(`progress-${bot.id}`);
       if (saved) {
@@ -92,6 +95,13 @@ export default function LandingPage() {
       return null;
     }).filter(Boolean) as BotProgress[];
     setProgress(active);
+
+    // Recently viewed
+    const recentIds = JSON.parse(localStorage.getItem("recently-viewed") || "[]") as string[];
+    const recent = recentIds
+      .map(id => BOTS.find(b => b.id === id))
+      .filter(Boolean) as typeof BOTS;
+    setRecentBots(recent);
   }, []);
 
   return (
@@ -106,6 +116,35 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {progress.map((bot) => (
                 <ResumeCard key={bot.id} bot={bot} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Recently Viewed */}
+        {recentBots.length > 0 && (
+          <div className="flex flex-col gap-8 animate-fade-in-up">
+            <div className="flex items-center justify-between px-2">
+              <p className="section-label">Recently Reconnected</p>
+              <button 
+                onClick={() => { localStorage.removeItem("recently-viewed"); setRecentBots([]); }}
+                className="text-[10px] font-black text-gray-400 hover:text-indigo-600 uppercase tracking-tighter"
+              >
+                Clear History
+              </button>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-6">
+              {recentBots.map((bot) => (
+                <Link
+                  key={bot.id}
+                  href={`/bots/${bot.id}`}
+                  className="flex items-center gap-4 p-4 rounded-2xl bg-white/40 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-800 hover:bg-white dark:hover:bg-gray-800 transition-all group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xl group-hover:scale-105 transition-transform">
+                    {bot.icon}
+                  </div>
+                  <span className="text-sm font-bold text-gray-700 dark:text-gray-200">{bot.label}</span>
+                </Link>
               ))}
             </div>
           </div>
