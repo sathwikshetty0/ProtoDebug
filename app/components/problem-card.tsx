@@ -77,17 +77,20 @@ export function ProblemCard({ problem }: { problem: Problem }) {
             </div>
           )}
 
-          <div className="flex items-center justify-between pt-2">
-            <div className="flex flex-wrap gap-1.5">
-              {problem.tags.slice(0, 8).map((t) => (
-                <span
-                  key={t}
-                  className="px-2.5 py-1 text-[10px] rounded-full bg-gray-100/80 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-mono border border-gray-200 dark:border-gray-700"
-                >
-                {t}
-                </span>
-              ))}
+            <div className="pt-4 border-t border-gray-100 dark:border-gray-800">
+              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Diagnostic Context</p>
+              <div className="flex flex-wrap gap-1.5">
+                {problem.tags.slice(0, 8).map((t) => (
+                  <span
+                    key={t}
+                    className="px-2.5 py-1 text-[10px] rounded-full bg-gray-100/80 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-mono border border-gray-200 dark:border-gray-700"
+                  >
+                  {t}
+                  </span>
+                ))}
+              </div>
             </div>
+            <div className="flex items-center justify-between pt-2">
             <button 
               onClick={(e) => {
                 e.stopPropagation();
