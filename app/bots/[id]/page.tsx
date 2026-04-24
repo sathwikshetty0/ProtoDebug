@@ -108,13 +108,20 @@ export default function BotDetailPage() {
   const [isAiActive, setIsAiActive] = useState(false);
   const [completedSections, setCompletedSections] = useState<Set<number>>(new Set());
 
-  // Load progress
+  // Load progress & handle recently viewed
   useEffect(() => {
     if (bot) {
+      // Progress
       const saved = localStorage.getItem(`progress-${bot.id}`);
       if (saved) {
         setCompletedSections(new Set(JSON.parse(saved)));
       }
+
+      // Recently viewed
+      const recent = JSON.parse(localStorage.getItem("recently-viewed") || "[]") as string[];
+      const filtered = recent.filter(id => id !== bot.id);
+      const updated = [bot.id, ...filtered].slice(0, 5);
+      localStorage.setItem("recently-viewed", JSON.stringify(updated));
     }
   }, [bot]);
 
