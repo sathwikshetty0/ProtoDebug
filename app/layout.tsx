@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 };
 
 import BackToTop from "@/app/components/back-to-top";
+import ToastContainer from "@/app/components/toast";
 
 export default function RootLayout({
   children,
@@ -43,6 +44,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <CommandPalette />
+          <ToastContainer />
           <div className="flex-grow">{children}</div>
         
         <footer className="w-full border-t border-card-border bg-card-bg py-10">

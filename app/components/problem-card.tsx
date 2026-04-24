@@ -3,9 +3,11 @@
 import { useState } from "react";
 import type { Problem } from "@/lib/data";
 import CodeBlock from "@/app/components/code-block";
+import { useToast } from "@/app/components/toast";
 
 export function ProblemCard({ problem }: { problem: Problem }) {
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
   return (
     <div className="section-card dark:bg-zinc-900/50 rounded-2xl overflow-hidden animate-scale-up border border-indigo-50/40 dark:border-white/5">
       <button
@@ -61,7 +63,7 @@ export function ProblemCard({ problem }: { problem: Problem }) {
                 <button 
                   onClick={() => {
                     navigator.clipboard.writeText(problem.code!.snippet);
-                    alert("Code snippet copied!");
+                    toast("Code snippet copied!");
                   }}
                   className="text-[10px] font-black text-indigo-500 hover:text-indigo-600 transition-colors uppercase tracking-tight"
                 >
@@ -90,7 +92,7 @@ export function ProblemCard({ problem }: { problem: Problem }) {
               onClick={(e) => {
                 e.stopPropagation();
                 navigator.clipboard.writeText(`${problem.title}\n\n${problem.description}`);
-                alert("Problem details copied to clipboard!");
+                toast("Problem details copied!");
               }}
               className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter hover:underline"
             >
