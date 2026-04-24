@@ -303,12 +303,15 @@ export default function IotPage() {
             </div>
 
             <form onSubmit={handleSearch} className="flex gap-3 mt-6">
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Describe current system state..."
-                className="flex-1 input-polished min-w-0"
-              />
+              <div className="flex-1 relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Describe current system state..."
+                  className="w-full input-polished pl-12 min-w-0"
+                />
+              </div>
               <button
                 type="submit"
                 className="btn-primary shrink-0"
