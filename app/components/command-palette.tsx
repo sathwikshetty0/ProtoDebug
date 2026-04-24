@@ -100,8 +100,10 @@ export default function CommandPalette() {
               />
             ))
           ) : (
-            <div className="p-8 text-center">
-              <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">No results found.</p>
+            <div className="p-12 text-center flex flex-col items-center gap-3">
+              <span className="text-4xl grayscale opacity-30">🔭</span>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">No intelligence found.</p>
+              <p className="text-[10px] text-gray-300 dark:text-gray-600 max-w-[200px]">Try searching for something else like &quot;Arduino&quot; or &quot;DHT22&quot;.</p>
             </div>
           )}
         </div>
