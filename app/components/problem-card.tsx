@@ -55,10 +55,24 @@ export function ProblemCard({ problem }: { problem: Problem }) {
           </div>
 
           {problem.code && (
-            <CodeBlock 
-              code={problem.code.snippet} 
-              lang={problem.code.lang} 
-            />
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Protocol Snippet ({problem.code.lang})</p>
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText(problem.code!.snippet);
+                    alert("Code snippet copied!");
+                  }}
+                  className="text-[10px] font-black text-indigo-500 hover:text-indigo-600 transition-colors uppercase tracking-tight"
+                >
+                  Copy Snippet
+                </button>
+              </div>
+              <CodeBlock 
+                code={problem.code.snippet} 
+                lang={problem.code.lang} 
+              />
+            </div>
           )}
 
           <div className="flex items-center justify-between pt-2">
