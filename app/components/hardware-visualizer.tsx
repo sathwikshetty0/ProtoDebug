@@ -31,7 +31,7 @@ export default function HardwareVisualizer({ mcu }: Props) {
         
         <div className={`relative bg-gray-800 dark:bg-black rounded-xl border-[6px] border-gray-700 dark:border-gray-800 shadow-2xl p-4 flex flex-col items-center gap-8 ${mcu.id === 'mega' ? 'w-48 h-80' : 'w-40 h-64'} transition-all duration-500`}>
           {/* Internal components */}
-          <div className="w-12 h-12 bg-gray-700 dark:bg-gray-900 rounded-lg border border-white/10 flex items-center justify-center text-xs font-mono text-white/20">
+          <div className="w-12 h-12 bg-gray-700 dark:bg-gray-900 rounded-lg border border-white/10 flex items-center justify-center text-xs font-mono text-indigo-400/50 animate-pulse">
              CPU
           </div>
 
