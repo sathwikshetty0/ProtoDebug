@@ -43,14 +43,14 @@ export default function HardwareVisualizer({ mcu }: Props) {
           {/* Left Pins */}
           <div className="absolute -left-3 inset-y-8 flex flex-col justify-between py-2">
             {Array.from({ length: pinsPerSide }).map((_, i) => (
-              <div key={i} className="w-4 h-1.5 bg-gray-600 dark:bg-gray-800 border border-white/5 rounded-r-sm" />
+              <div key={i} className="w-4 h-1.5 bg-gray-600 dark:bg-gray-800 border border-white/5 rounded-r-sm hover:scale-x-125 hover:bg-indigo-500 transition-all duration-200 cursor-help" />
             ))}
           </div>
 
           {/* Right Pins */}
           <div className="absolute -right-3 inset-y-8 flex flex-col justify-between py-2">
             {Array.from({ length: pinsPerSide }).map((_, i) => (
-              <div key={i} className="w-4 h-1.5 bg-gray-600 dark:bg-gray-800 border border-white/5 rounded-l-sm" />
+              <div key={i} className="w-4 h-1.5 bg-gray-600 dark:bg-gray-800 border border-white/5 rounded-l-sm hover:-scale-x-125 hover:bg-indigo-500 transition-all duration-200 cursor-help" />
             ))}
           </div>
 
