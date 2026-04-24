@@ -93,10 +93,12 @@ export default function AiAssistant({
     }
   }
 
+  const [isMinimized, setIsMinimized] = useState(false);
+
   return (
-    <div className="flex flex-col h-[500px] sm:h-[600px] w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-indigo-100 dark:border-gray-800 overflow-hidden animate-scale-up">
+    <div className={`flex flex-col ${isMinimized ? 'h-auto' : 'h-[500px] sm:h-[600px]'} w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-indigo-100 dark:border-gray-800 overflow-hidden transition-all duration-300 animate-scale-up`}>
       {/* Header */}
-      <div className="px-5 py-3 sm:px-6 sm:py-4 bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-between">
+      <div className="px-5 py-3 sm:px-6 sm:py-4 bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-between cursor-pointer" onClick={() => setIsMinimized(!isMinimized)}>
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
             🤖
@@ -106,14 +108,22 @@ export default function AiAssistant({
             <p className="text-xs text-indigo-100 font-medium opacity-80">Intelligence Active</p>
           </div>
         </div>
-        {onClose && (
-          <button onClick={onClose} className="text-white/60 hover:text-white transition-colors">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+        <div className="flex items-center gap-2">
+          <button onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); }} className="text-white/60 hover:text-white transition-colors p-1">
+            <span className="text-lg">{isMinimized ? "□" : "—"}</span>
           </button>
-        )}
+          {onClose && (
+            <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="text-white/60 hover:text-white transition-colors p-1">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
+
+      {!isMinimized && (
+        <>
 
       {/* Messages */}
       <div 
@@ -193,6 +203,8 @@ export default function AiAssistant({
           </svg>
         </button>
       </form>
+        </>
+      )}
     </div>
   );
 }
