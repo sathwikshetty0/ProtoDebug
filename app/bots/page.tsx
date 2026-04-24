@@ -64,16 +64,28 @@ export default function BotsPage() {
               className={`card-elevated flex flex-col gap-4 p-6 sm:p-8 rounded-2xl group transition-all duration-300 animate-fade-in-up border border-indigo-50 dark:border-gray-800`}
               style={{ animationDelay: `${(i + 1) * 100}ms` }}
             >
-              <div className="w-16 h-16 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 flex items-center justify-center text-4xl group-hover:scale-105 transition-transform duration-300 shadow-sm">
-                {bot.icon}
-              </div>
-              <div className="flex-1 mt-2">
-                <p className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
-                  {bot.label}
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed line-clamp-3">
-                  {bot.description}
-                </p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-500">
+                    {bot.icon}
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className={`px-2 py-0.5 text-[8px] font-black uppercase tracking-widest rounded-md border ${
+                      bot.difficulty === "Beginner" ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
+                      bot.difficulty === "Intermediate" ? "bg-amber-50 text-amber-600 border-amber-100" :
+                      "bg-rose-50 text-rose-600 border-rose-100"
+                    }`}>
+                      {bot.difficulty}
+                    </span>
+                    <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">
+                      {bot.category}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors">{bot.label}</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-2 leading-relaxed">{bot.description}</p>
+                </div>
               </div>
               <div className="flex items-center justify-between pt-5 border-t border-gray-100 dark:border-gray-800 mt-2">
                 <span className="text-xs text-gray-600 dark:text-gray-300 font-medium bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700">
