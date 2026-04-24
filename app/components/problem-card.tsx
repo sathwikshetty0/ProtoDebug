@@ -115,6 +115,7 @@ export function ResultsList({
   results: Problem[];
   label: string;
 }) {
+  const { toast } = useToast();
   return (
     <section className="flex flex-col gap-3">
       <div className="flex items-center justify-between px-1">

@@ -34,6 +34,16 @@ export default function CommandPalette() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const items = [
+    ...MICROCONTROLLERS.map((m) => ({ id: m.id, label: m.label, type: "MCU", icon: m.icon, href: "/iot" })),
+    ...COMPONENT_CATEGORIES.flatMap((cat) => cat.components.map((c) => ({ id: c.id, label: c.label, type: "Component", icon: c.icon, href: "/iot" }))),
+    ...BOTS.map((b) => ({ id: b.id, label: b.label, type: "Bot", icon: b.icon, href: `/bots/${b.id}` })),
+  ];
+
+  const filteredItems = query === "" 
+    ? items.slice(0, 5) 
+    : items.filter((item) => item.label.toLowerCase().includes(query.toLowerCase())).slice(0, 8);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -57,16 +67,6 @@ export default function CommandPalette() {
       inputRef.current?.focus();
     }
   }, [isOpen]);
-
-  const items = [
-    ...MICROCONTROLLERS.map((m) => ({ id: m.id, label: m.label, type: "MCU", icon: m.icon, href: "/iot" })),
-    ...COMPONENT_CATEGORIES.flatMap((cat) => cat.components.map((c) => ({ id: c.id, label: c.label, type: "Component", icon: c.icon, href: "/iot" }))),
-    ...BOTS.map((b) => ({ id: b.id, label: b.label, type: "Bot", icon: b.icon, href: `/bots/${b.id}` })),
-  ];
-
-  const filteredItems = query === "" 
-    ? items.slice(0, 5) 
-    : items.filter((item) => item.label.toLowerCase().includes(query.toLowerCase())).slice(0, 8);
 
   if (!isOpen) return null;
 
