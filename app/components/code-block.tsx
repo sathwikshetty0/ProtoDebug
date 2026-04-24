@@ -17,28 +17,39 @@ export default function CodeBlock({ code, lang }: Props) {
   };
 
   return (
-    <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm animate-scale-up group relative">
-      <div className="code-block-header !bg-gray-800 dark:!bg-black px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-           <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wide">{lang || 'CODE'}</span>
+    <div className="rounded-2xl overflow-hidden border border-indigo-50/50 dark:border-white/5 shadow-xl animate-scale-up group relative">
+      <div className="code-block-header !bg-[#1e1e2e] dark:!bg-black/80 px-5 py-3 flex items-center justify-between border-b border-white/5">
+        <div className="flex items-center gap-3">
+           <div className="flex gap-1.5">
+             <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+             <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+           </div>
+           <span className="text-[10px] font-black text-indigo-300/60 uppercase tracking-[0.2em] ml-2">
+             {lang === 'bash' || lang === 'shell' ? 'Terminal' : (lang || 'Snippet')}
+           </span>
         </div>
         <button 
           onClick={handleCopy}
-          className={`text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-lg transition-colors ${
+          className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all active:scale-95 ${
             copied 
-              ? 'bg-emerald-500 text-white' 
-              : 'bg-gray-700 dark:bg-gray-800 text-gray-300 hover:text-white'
+              ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+              : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
           }`}
         >
-          {copied ? '✓ COPIED' : 'COPY'}
+          {copied ? '✓ Copied' : 'Copy'}
         </button>
       </div>
       <div className="relative">
-        <pre className="code-block-body !bg-gray-900 !p-6 text-[13px] leading-relaxed selection:bg-indigo-500/30">
-          {code}
+        <pre className="code-block-body !bg-[#1e1e2e] !p-6 sm:!p-8 text-[13px] leading-relaxed selection:bg-indigo-500/30 font-mono text-gray-300 overflow-x-auto">
+          <code className="block">
+            {code}
+          </code>
         </pre>
-        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-           <span className="text-xs font-semibold text-white/10 uppercase tracking-widest">{code.split('\n').length} LINES</span>
+        <div className="absolute bottom-4 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+           <span className="text-[10px] font-bold text-white/5 uppercase tracking-[0.3em] pointer-events-none">
+             {code.split('\n').length} lines
+           </span>
         </div>
       </div>
     </div>
