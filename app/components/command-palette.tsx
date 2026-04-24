@@ -40,13 +40,17 @@ export default function CommandPalette() {
         e.preventDefault();
         setIsOpen((prev) => !prev);
       }
+      if (e.key === "Enter" && filteredItems.length > 0) {
+        router.push(filteredItems[0].href);
+        setIsOpen(false);
+      }
       if (e.key === "Escape") {
         setIsOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [isOpen, filteredItems, router]);
 
   useEffect(() => {
     if (isOpen) {
